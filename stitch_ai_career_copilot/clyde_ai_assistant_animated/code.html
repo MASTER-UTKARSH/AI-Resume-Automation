@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clyde - AI Career Partner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#757575",
+                        "inverse-surface": "#e2e2e2",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1a1c1b",
+                        "on-error-container": "#ffdad6",
+                        "secondary": "#c6c7c5",
+                        "on-surface-variant": "#cfc4c5",
+                        "bone": "#f6f6f4",
+                        "inverse-primary": "#5e5e5e",
+                        "secondary-container": "#454746",
+                        "char": "#1a1a1a",
+                        "outline": "#988e90",
+                        "slate": "#7d7d7d",
+                        "surface-dim": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary": "#2f3130",
+                        "secondary-fixed": "#e2e3e1",
+                        "inverse-on-surface": "#303030",
+                        "primary-container": "#000000",
+                        "on-secondary-container": "#b4b5b4",
+                        "paper": "#ffffff",
+                        "tertiary": "#c6c6c6",
+                        "primary": "#c6c6c6",
+                        "tertiary-container": "#000000",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "obsidian": "#000000",
+                        "on-secondary-fixed-variant": "#454746",
+                        "background": "#131313",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "solstice-gradient": "linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%)",
+                        "on-tertiary": "#303030",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "surface-container-highest": "#353535",
+                        "surface-container-low": "#1b1b1b",
+                        "secondary-fixed-dim": "#c6c7c5",
+                        "surface-tint": "#c6c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface": "#e2e2e2",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "on-primary-container": "#757575",
+                        "outline-variant": "#4c4546",
+                        "on-background": "#e2e2e2",
+                        "on-primary": "#303030",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-variant": "#353535",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container": "#1f1f1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "64px",
+                        "xs": "20px",
+                        "max-width": "1200px",
+                        "md": "44px",
+                        "sm": "24px",
+                        "xxl": "144px",
+                        "section-gap": "80px",
+                        "xl": "92px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "heading": ["Recoleta", "serif"],
+                        "body": ["Oldschool Grotesk", "sans-serif"],
+                        "body-lg": ["Oldschool Grotesk", "sans-serif"],
+                        "headline-lg-mobile": ["Recoleta", "serif"],
+                        "heading-sm": ["Recoleta", "serif"],
+                        "display": ["Recoleta", "serif"],
+                        "subheading": ["Recoleta", "serif"],
+                        "headline-lg": ["Recoleta", "serif"],
+                        "label": ["Oldschool Grotesk", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "heading": ["61px", {"lineHeight": "1.1", "letterSpacing": "-1.22px", "fontWeight": "400"}],
+                        "body": ["16px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                        "body-lg": ["21px", {"lineHeight": "1.3", "letterSpacing": "-0.42px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["48px", {"lineHeight": "1.1", "letterSpacing": "-1.5px", "fontWeight": "400"}],
+                        "heading-sm": ["47px", {"lineHeight": "1.1", "letterSpacing": "-0.94px", "fontWeight": "400"}],
+                        "display": ["125px", {"lineHeight": "1.0", "letterSpacing": "-3.75px", "fontWeight": "400"}],
+                        "subheading": ["36px", {"lineHeight": "1.1", "letterSpacing": "-0.36px", "fontWeight": "400"}],
+                        "headline-lg": ["80px", {"lineHeight": "1.0", "letterSpacing": "-2.4px", "fontWeight": "400"}],
+                        "label": ["15px", {"lineHeight": "1.6", "letterSpacing": "0.15px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @font-face {
+            font-family: 'Recoleta';
+            src: url('https://fonts.cdnfonts.com/css/recoleta') format('woff2');
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Oldschool Grotesk';
+            src: url('https://fonts.cdnfonts.com/css/oldschool-grotesk') format('woff2');
+            font-display: swap;
+        }
+        
+        /* Animation Keyframes */
+        @keyframes revealUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(246, 246, 244, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(246, 246, 244, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(246, 246, 244, 0); }
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .animate-reveal {
+                animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                opacity: 0;
+            }
+            .delay-100 { animation-delay: 0.2s; }
+            .delay-200 { animation-delay: 0.4s; }
+
+            .shimmer-placeholder::placeholder {
+                animation: shimmer 2s infinite ease-in-out;
+            }
+
+            .pulse-button {
+                animation: pulse 3s infinite;
+            }
+
+            .chat-input-container {
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+            }
+            .chat-input-container:focus-within {
+                transform: scale(1.01);
+                box-shadow: 0 0 20px rgba(254, 237, 122, 0.1), 0 0 40px rgba(223, 145, 247, 0.1);
+            }
+
+            .action-pill {
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .action-pill:hover {
+                transform: translateY(-4px);
+                background-color: #f6f6f4 !important;
+                color: #000000 !important;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            }
+        }
+
+        /* Hide scrollbar */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-bone font-body h-screen overflow-hidden flex relative">
+<!-- WebGL Shader Background -->
+<!-- STITCH_SHADER_START:ANIMATION_10 class="fixed inset-0 w-full h-full -z-10" -->
+<div class="fixed inset-0 w-full h-full -z-10" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_10" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_10');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+
+// Simplex noise helper
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  float m1 = 1.79284291400159 - 0.85373472095314 * ( a0.x*a0.x + h.x*h.x );
+  vec3 g;
+  g.x  = a0.x * x0.x  + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 mouse = u_mouse / u_resolution;
+    
+    // Create a slow, organic motion field
+    float n = snoise(uv * 1.5 + u_time * 0.1);
+    n += 0.5 * snoise(uv * 3.0 - u_time * 0.15);
+    
+    // Clyde Palette
+    vec3 obsidian = vec3(0.0, 0.0, 0.0);
+    vec3 yellow = vec3(0.996, 0.929, 0.478); // #feed7a
+    vec3 orange = vec3(1.0, 0.518, 0.0);    // #ff8400
+    vec3 purple = vec3(0.875, 0.569, 0.969); // #df91f7
+    
+    // Distance from center/mouse for vignetting and focus
+    float dist = distance(uv, vec2(0.5) + (mouse - 0.5) * 0.2);
+    
+    // Create a fluid gradient mask
+    float mask = smoothstep(0.8, 0.2, dist + n * 0.1);
+    
+    // Mix the colors based on noise and position
+    vec3 gradient = mix(yellow, orange, uv.x + n * 0.2);
+    gradient = mix(gradient, purple, uv.y - n * 0.2);
+    
+    // Darken it significantly to keep it atmospheric and accessible
+    vec3 finalColor = mix(obsidian, gradient * 0.15, mask);
+    
+    // Add a very subtle grain
+    float grain = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+    finalColor += grain * 0.015;
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_10 -->
+<!-- SideNavBar -->
+<nav class="bg-obsidian/40 backdrop-blur-md border-r border-char h-screen w-20 fixed left-0 top-0 flex flex-col py-xl px-0 z-50">
+<div class="mb-lg hidden">
+<h1 class="font-heading text-subheading text-bone tracking-tighter">Clyde</h1>
+<p class="font-body text-body text-slate mt-1">AI Career Partner</p>
+</div>
+<ul class="flex flex-col gap-4 flex-1">
+<li>
+<a class="flex items-center justify-center w-full px-0 text-bone font-bold border-r-2 border-bone pb-1 hover:text-bone transition-colors duration-200 scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_comment</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-center w-full px-0 text-slate p-2 hover:text-bone transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-center w-full px-0 text-slate p-2 hover:text-bone transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">work</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-center w-full px-0 text-slate p-2 hover:text-bone transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">description</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-center w-full px-0 text-slate p-2 hover:text-bone transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+</a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center justify-center w-full px-0 text-slate p-2 hover:text-bone transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Canvas -->
+<div class="ml-20 flex-1 flex flex-col h-screen relative z-10 bg-transparent">
+<!-- TopAppBar -->
+<header class="bg-transparent docked full-width top-0 flex justify-between items-center w-full px-lg py-sm z-40">
+<div class="flex-1"></div>
+<div class="flex gap-4">
+<button class="text-bone hover:opacity-80 transition-opacity p-2">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-bone hover:opacity-80 transition-opacity p-2">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Chat Area -->
+<main class="flex-1 flex flex-col items-center justify-center px-lg pb-12 overflow-y-auto">
+<!-- Hero Content -->
+<div class="text-center mb-16 flex flex-col items-center justify-center h-full max-w-3xl" id="hero-state">
+<h2 class="font-heading text-headline-lg-mobile md:text-headline-lg text-bone mb-6 leading-tight animate-reveal">
+                    How can I help your career today?
+                </h2>
+<!-- Action Pills -->
+<div class="flex flex-wrap justify-center gap-3 mt-8 animate-reveal delay-100">
+<button class="action-pill border border-char text-bone hover:bg-char rounded-full px-6 py-2 font-label text-label flex items-center gap-2 bg-obsidian/40 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[18px]">description</span>
+                        Optimize my resume
+                    </button>
+<button class="action-pill border border-char text-bone hover:bg-char rounded-full px-6 py-2 font-label text-label flex items-center gap-2 bg-obsidian/40 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[18px]">work</span>
+                        Find internships
+                    </button>
+<button class="action-pill border border-char text-bone hover:bg-char rounded-full px-6 py-2 font-label text-label flex items-center gap-2 bg-obsidian/40 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+                        Prepare for interview
+                    </button>
+</div>
+</div>
+<!-- Input Area -->
+<div class="w-full max-w-3xl mt-auto relative z-20 animate-reveal delay-200">
+<div class="chat-input-container relative flex items-center group">
+<div class="absolute inset-0 rounded-full border border-bone/30 group-focus-within:border-bone transition-colors pointer-events-none"></div>
+<!-- Subtle Solstice Border Glow on Focus -->
+<div class="absolute inset-[-1px] rounded-full opacity-0 group-focus-within:opacity-100 blur-[2px] transition-opacity pointer-events-none" style="background: linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%); z-index: -1;"></div>
+<input class="w-full bg-obsidian/60 backdrop-blur-lg border-none rounded-full py-5 pl-6 pr-16 text-bone font-body text-body focus:outline-none placeholder:text-slate shimmer-placeholder" placeholder="Message Clyde..." type="text"/>
+<button class="absolute right-3 p-3 bg-bone text-obsidian rounded-full hover:bg-slate transition-colors flex items-center justify-center h-10 w-10 pulse-button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_upward</span>
+</button>
+</div>
+<p class="text-center font-label text-[12px] text-slate mt-4">
+                    Clyde can make mistakes. Verify important information.
+                </p>
+</div>
+</main>
+</div>
+</body></html>

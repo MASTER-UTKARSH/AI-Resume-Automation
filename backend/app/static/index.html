@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Clyde — AI Career Partner</title>
+  
+  <!-- Tailwind CSS with Stitch Clyde Theme Configuration -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "obsidian": "#000000",
+            "char": "#1a1a1a",
+            "slate": "#7d7d7d",
+            "bone": "#f6f6f4",
+            "paper": "#ffffff",
+            "surface-dim": "#131313",
+            "surface-container": "#1f1f1f",
+            "surface-container-high": "#2a2a2a",
+            "emerald": "#10b981",
+            "amber": "#f59e0b",
+            "rose": "#f43f5e"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            heading: ["Recoleta", "Playfair Display", "Georgia", "serif"],
+            body: ["Oldschool Grotesk", "Plus Jakarta Sans", "Inter", "sans-serif"],
+            label: ["Oldschool Grotesk", "Plus Jakarta Sans", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & Material Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/recoleta" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/oldschool-grotesk" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'Recoleta';
+      src: url('https://fonts.cdnfonts.com/s/72957/Recoleta-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Oldschool Grotesk';
+      src: url('https://fonts.cdnfonts.com/s/112678/OldschoolGrotesk-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    body {
+      background-color: #000000;
+      color: #f6f6f4;
+      font-family: 'Oldschool Grotesk', 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Recoleta', 'Playfair Display', Georgia, serif;
+    }
+
+    .blob-gradient {
+      background: linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%);
+      filter: blur(120px);
+      opacity: 0.14;
+      animation: floatBlob 24s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(8%, 6%) scale(1.08); }
+      100% { transform: translate(-6%, 10%) scale(0.92); }
+    }
+
+    .bg-solstice-gradient {
+      background-image: linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%);
+    }
+
+    .text-solstice-gradient {
+      background-image: linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Custom thin scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #000000; }
+    ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #333333; }
+
+    /* Animated Dot Pulse */
+    .typing-dots span {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #ff8400;
+      margin: 0 2px;
+      animation: dotPulse 1.4s infinite ease-in-out both;
+    }
+    .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Toast Container */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast-item {
+      background: #1a1a1a;
+      border: 1px solid #333333;
+      color: #f6f6f4;
+      padding: 12px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+      animation: toastSlide 0.25s ease-out forwards;
+    }
+    @keyframes toastSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-obsidian text-bone font-body min-h-screen flex overflow-x-hidden">
+
+  <!-- Ambient Floating Solstice Gradient Spotlight -->
+  <div class="fixed top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blob-gradient pointer-events-none z-0"></div>
+
+  <!-- ============================================== -->
+  <!-- STITCH SIDE NAV RAIL (80px Wide Minimalist)    -->
+  <!-- ============================================== -->
+  <nav class="bg-obsidian border-r border-char h-screen w-20 fixed left-0 top-0 flex flex-col py-8 z-50">
+    <!-- Brand Mark -->
+    <div class="flex justify-center mb-8">
+      <div class="w-10 h-10 rounded-full bg-solstice-gradient flex items-center justify-center shadow-[0_0_16px_rgba(255,132,0,0.3)]">
+        <span class="font-heading text-obsidian font-bold text-lg">C</span>
+      </div>
+    </div>
+
+    <!-- Navigation Icons -->
+    <ul class="flex flex-col gap-5 flex-1 items-center">
+      <li>
+        <button id="nav-agent" onclick="switchTab('agent')" class="nav-item group relative flex items-center justify-center w-12 h-12 rounded-xl text-bone border-r-2 border-bone transition-all" title="AI Career Copilot">
+          <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">add_comment</span>
+        </button>
+      </li>
+      <li>
+        <button id="nav-resumes" onclick="switchTab('resumes')" class="nav-item group relative flex items-center justify-center w-12 h-12 rounded-xl text-slate hover:text-bone transition-all" title="Resume Library">
+          <span class="material-symbols-outlined text-2xl">description</span>
+        </button>
+      </li>
+      <li>
+        <button id="nav-jobs" onclick="switchTab('jobs')" class="nav-item group relative flex items-center justify-center w-12 h-12 rounded-xl text-slate hover:text-bone transition-all" title="Job Discovery">
+          <span class="material-symbols-outlined text-2xl">work</span>
+        </button>
+      </li>
+      <li>
+        <button id="nav-ats" onclick="switchTab('ats')" class="nav-item group relative flex items-center justify-center w-12 h-12 rounded-xl text-slate hover:text-bone transition-all" title="ATS Analysis">
+          <span class="material-symbols-outlined text-2xl">assignment_turned_in</span>
+        </button>
+      </li>
+      <li>
+        <button id="nav-telemetry" onclick="switchTab('telemetry')" class="nav-item group relative flex items-center justify-center w-12 h-12 rounded-xl text-slate hover:text-bone transition-all" title="Architecture & Event Bus">
+          <span class="material-symbols-outlined text-2xl">hub</span>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Bottom User Avatar -->
+    <div class="flex flex-col items-center gap-3">
+      <a href="/docs" target="_blank" class="text-slate hover:text-bone p-2" title="FastAPI Interactive Swagger Docs">
+        <span class="material-symbols-outlined text-xl">api</span>
+      </a>
+      <div class="w-10 h-10 rounded-full border border-char bg-char flex items-center justify-center text-xs font-bold text-bone" title="Utkarsh Shah (JUET 241B278)">
+        US
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================== -->
+  <!-- MAIN WORKSPACE CANVAS                          -->
+  <!-- ============================================== -->
+  <div class="ml-20 flex-1 flex flex-col min-h-screen relative z-10">
+
+    <!-- Top Minimalist Bar -->
+    <header class="h-16 px-8 flex justify-between items-center border-b border-char/40 sticky top-0 z-40 bg-obsidian/85 backdrop-blur-md">
+      <div class="flex items-center gap-4">
+        <h2 id="page-title" class="font-heading text-lg text-bone">Clyde</h2>
+        <span class="text-xs font-label text-slate uppercase tracking-widest">• Career Partner</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full border border-char bg-obsidian text-xs text-slate">
+          <span class="w-2 h-2 rounded-full bg-emerald shadow-[0_0_8px_#10b981]"></span>
+          <span>FastAPI + FAISS Active</span>
+        </div>
+        <button onclick="openResumePreview()" class="px-4 py-1.5 rounded-full border border-char text-xs text-bone hover:border-bone transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">visibility</span>
+          <span>ATS Resume PDF</span>
+        </button>
+        <button onclick="loadDemoResume()" class="px-4 py-1.5 rounded-full border border-bone text-xs text-bone hover:bg-bone hover:text-obsidian transition-colors font-medium">
+          Load Utkarsh Shah Profile
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT WRAPPER -->
+    <div class="flex-1 p-8 lg:p-12 max-w-5xl mx-auto w-full">
+
+      <!-- ============================================== -->
+      <!-- VIEW 1: AI CAREER COPILOT CHAT (Stitch Design) -->
+      <!-- ============================================== -->
+      <section id="view-agent" class="view-panel flex flex-col h-[calc(100vh-140px)]">
+        
+        <!-- Messages Area -->
+        <div id="chat-stream-box" class="flex-1 overflow-y-auto pr-2 flex flex-col justify-between">
+          
+          <!-- Hero State (Initial) -->
+          <div id="hero-state" class="text-center my-auto flex flex-col items-center justify-center max-w-2xl mx-auto py-8">
+            <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl text-bone mb-6 leading-tight tracking-tight">
+              How can I help your career today?
+            </h1>
+            <p class="font-body text-slate text-base max-w-lg mb-8">
+              Clyde coordinates specialized AI agents to tailor resumes, run FAISS semantic matching, and prepare ATS-optimized applications.
+            </p>
+
+            <!-- Stitch Action Pills -->
+            <div class="flex flex-wrap justify-center gap-3">
+              <button onclick="sendQuickPrompt('Optimize my resume for full-stack and AI roles')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+                Optimize my resume
+              </button>
+              <button onclick="switchTab('jobs'); triggerJobMatch();" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">bolt</span>
+                Run FAISS Job Match
+              </button>
+              <button onclick="sendQuickPrompt('Draft a tailored cover letter for NVIDIA AI Engineer Intern role')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">mail</span>
+                Draft NVIDIA Cover Letter
+              </button>
+              <button onclick="switchTab('ats')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+                ATS Keyword Audit
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Message Log -->
+          <div id="messages-container" class="space-y-6 pb-6 w-full hidden">
+            <!-- Messages inserted dynamically -->
+          </div>
+        </div>
+
+        <!-- Sleek Bottom Input Bar (Stitch Design) -->
+        <div class="w-full mt-auto pt-4">
+          <form onsubmit="handleChatSubmit(event)" class="relative flex items-center">
+            <input id="chat-input" type="text" placeholder="Message Clyde..." 
+                   class="w-full bg-obsidian border border-bone rounded-full py-4 pl-6 pr-16 text-bone font-body text-sm focus:outline-none focus:border-slate transition-colors placeholder:text-slate shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+            <button type="submit" class="absolute right-2 p-2.5 bg-bone text-obsidian rounded-full hover:bg-slate transition-colors flex items-center justify-center h-10 w-10">
+              <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">arrow_upward</span>
+            </button>
+          </form>
+          <p class="text-center font-label text-[11px] text-slate mt-3">
+            Event-Driven Architecture • Model Router (GLM-4, Groq, Qwen) • Anti-Hallucination Safe
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 2: RESUME LIBRARY (Stitch Design)         -->
+      <!-- ============================================== -->
+      <section id="view-resumes" class="view-panel hidden space-y-10 pb-12">
+        <div>
+          <h1 class="font-heading text-4xl md:text-5xl text-bone tracking-tight mb-3">Your Library</h1>
+          <p class="font-body text-slate text-sm">Upload, analyze, and version your ATS resumes with deterministic parsing.</p>
+        </div>
+
+        <!-- Stitch Upload Dropzone -->
+        <div onclick="document.getElementById('pdf-file-input').click()" 
+             class="w-full border border-dashed border-bone/60 hover:border-bone rounded-xl flex flex-col items-center justify-center py-12 px-6 hover:bg-char/30 transition-all cursor-pointer group text-center">
+          <input type="file" id="pdf-file-input" accept=".pdf" class="hidden" onchange="handleFileUpload(event)" />
+          <div class="bg-obsidian border border-bone rounded-full p-3 mb-4 group-hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined text-2xl text-bone">upload_file</span>
+          </div>
+          <h2 class="font-heading text-xl text-bone mb-1">Upload Resume PDF</h2>
+          <p class="font-body text-sm text-slate max-w-sm">Drag and drop your resume here, or click to browse. Clyde extracts text and computes ATS scoring.</p>
+          <button class="mt-6 bg-bone text-obsidian rounded-full py-2 px-6 font-label text-xs font-bold border border-bone hover:bg-transparent hover:text-bone transition-colors">
+            Browse Files
+          </button>
+        </div>
+
+        <!-- Active Documents -->
+        <div>
+          <div class="flex justify-between items-center mb-6 border-b border-char pb-3">
+            <h2 class="font-heading text-2xl text-bone">Active Candidate Profile</h2>
+            <div class="flex gap-3">
+              <button onclick="openResumePreview()" class="text-xs text-bone border border-char hover:border-bone px-4 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">print</span> Preview ATS Document
+              </button>
+              <button onclick="switchTab('jobs'); triggerJobMatch();" class="text-xs bg-bone text-obsidian font-bold px-4 py-1.5 rounded-full hover:bg-slate transition-colors">
+                Run Vector Matching
+              </button>
+            </div>
+          </div>
+
+          <!-- Document Profile Card (Stitch Paper Panel Style) -->
+          <div class="border border-char rounded-xl overflow-hidden bg-surface-dim">
+            <div class="p-6 border-b border-char flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <div class="flex items-center gap-3">
+                  <h3 id="profile-name" class="font-heading text-2xl text-bone">Utkarsh Shah</h3>
+                  <span class="bg-obsidian text-bone text-[11px] font-label py-0.5 px-3 rounded-full border border-bone">Primary Active</span>
+                </div>
+                <p id="profile-headline" class="text-sm text-slate mt-1 font-body">B.Tech Computer Science & Engineering • JUET Guna (Class of 2026)</p>
+                <div class="flex flex-wrap gap-4 text-xs text-slate mt-3 font-mono">
+                  <span id="profile-email">utkarsh.shah@juetguna.in</span>
+                  <span>•</span>
+                  <span id="profile-phone">+91 9876543210</span>
+                  <span>•</span>
+                  <span>CGPA: 8.8 / 10.0</span>
+                </div>
+              </div>
+
+              <!-- ATS Score Indicator -->
+              <div class="flex items-center gap-4 bg-obsidian border border-char rounded-xl p-4">
+                <div class="w-12 h-12 rounded-full border-2 border-emerald flex items-center justify-center font-heading text-lg font-bold text-bone">
+                  <span id="resume-ats-score">94%</span>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-bone">Baseline ATS Score</div>
+                  <div class="text-[11px] text-emerald">High Compliance (PyPDF)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Normalized Skills -->
+            <div class="p-6 border-b border-char">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-label text-slate uppercase tracking-wider">Normalized Extracted Skills</span>
+                <span id="skills-count-badge" class="text-xs text-bone font-mono">12 Skills</span>
+              </div>
+              <div id="skills-list-container" class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('Python')">Python</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('FastAPI')">FastAPI</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('FAISS')">FAISS</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('PyTorch')">PyTorch</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('Redis')">Redis</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('PostgreSQL')">PostgreSQL</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('Docker')">Docker</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('React')">React</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('Git')">Git</span>
+                <span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('REST APIs')">REST APIs</span>
+              </div>
+            </div>
+
+            <!-- Live ATS Bullet Optimizer (Unclustered Minimalist) -->
+            <div class="p-6 bg-obsidian/40">
+              <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm text-[#ff8400]">auto_fix_high</span>
+                  <span class="text-xs font-label text-bone font-bold uppercase tracking-wider">Live ATS Bullet Optimizer (Google XYZ Metric)</span>
+                </div>
+                <button onclick="applyOptimizedBullet()" id="apply-bullet-btn" class="px-4 py-1 rounded-full bg-bone text-obsidian font-label text-xs font-bold hover:bg-slate transition-colors">
+                  Accept & Sync
+                </button>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-body">
+                <div class="p-3 rounded-lg border border-char bg-obsidian/60 text-slate">
+                  <div class="text-[10px] uppercase text-rose mb-1 font-bold">Passive Draft</div>
+                  <p>Worked on an event-driven multi-agent platform for resume optimization and matching.</p>
+                </div>
+                <div class="p-3 rounded-lg border border-emerald/40 bg-emerald/5 text-bone">
+                  <div class="text-[10px] uppercase text-emerald mb-1 font-bold">Clyde XYZ Formula</div>
+                  <p id="bullet-optimized-text"><strong>Architected</strong> an event-driven multi-agent platform using FastAPI and FAISS, <strong>reducing semantic matching latency by 42%</strong> with <strong>94% ATS compliance</strong>.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 3: JOB DISCOVERY (Stitch Design)          -->
+      <!-- ============================================== -->
+      <section id="view-jobs" class="view-panel hidden space-y-8 pb-12">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+          <div>
+            <h1 class="font-heading text-4xl md:text-5xl text-bone tracking-tight mb-2">Job Discovery</h1>
+            <p class="font-body text-slate text-sm">Semantic matching powered by 128-D FAISS IndexFlatIP & 4-factor hybrid scoring.</p>
+          </div>
+          <button onclick="triggerJobMatch()" class="bg-bone text-obsidian rounded-full px-6 py-2.5 font-label text-sm font-bold hover:bg-transparent hover:text-bone hover:border hover:border-bone transition-colors flex items-center gap-2 shrink-0">
+            <span class="material-symbols-outlined text-sm">bolt</span>
+            <span id="match-btn-text">Run FAISS Multi-Factor Match</span>
+          </button>
+        </div>
+
+        <!-- Filter and Search Row -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-char pb-4">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="applyJobFilter('all', this)" class="filter-chip px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-xs font-bold transition-colors">All Roles</button>
+            <button onclick="applyJobFilter('ai', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">AI & Machine Learning</button>
+            <button onclick="applyJobFilter('distributed', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Backend & Systems</button>
+            <button onclick="applyJobFilter('bangalore', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Bangalore</button>
+            <button onclick="applyJobFilter('remote', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Remote</button>
+          </div>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate text-sm">search</span>
+            <input id="job-search-input" oninput="handleJobSearch(event)" type="text" placeholder="Filter roles, skills..." 
+                   class="bg-obsidian border border-char rounded-full pl-9 pr-4 py-1.5 text-xs text-bone focus:outline-none focus:border-bone w-56 placeholder:text-slate">
+          </div>
+        </div>
+
+        <!-- Jobs Grid Container -->
+        <div id="jobs-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 4: ATS KEYWORD AUDIT (Stitch Design)      -->
+      <!-- ============================================== -->
+      <section id="view-ats" class="view-panel hidden space-y-10 pb-12">
+        <div>
+          <h1 class="font-heading text-4xl md:text-5xl text-bone tracking-tight mb-2">ATS Analysis</h1>
+          <p class="font-body text-slate text-sm">Deterministic keyword compliance, structural parser audit, and skill gap injection.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Circular Gauge Card -->
+          <div class="border border-char rounded-xl p-8 bg-surface-dim flex flex-col items-center text-center justify-center">
+            <div class="w-28 h-28 rounded-full border-4 border-emerald flex items-center justify-center mb-4">
+              <span class="font-heading text-3xl text-bone font-bold">94%</span>
+            </div>
+            <h3 class="font-heading text-xl text-bone mb-1">Excellent Score</h3>
+            <p class="text-xs text-slate font-body max-w-xs">High pass rate for tech ATS filters. Standard single-column format with zero parsing conflicts.</p>
+          </div>
+
+          <!-- Compliance Checklist -->
+          <div class="md:col-span-2 border border-char rounded-xl p-8 bg-surface-dim space-y-4">
+            <h3 class="font-heading text-xl text-bone mb-4">Structural Compliance Checklist</h3>
+            <div class="space-y-3 font-body text-xs">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-emerald text-base shrink-0">check_circle</span>
+                <div>
+                  <strong class="text-bone">Single-Column Document Layout</strong>
+                  <p class="text-slate mt-0.5">Parsed cleanly without multi-column table collisions.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-emerald text-base shrink-0">check_circle</span>
+                <div>
+                  <strong class="text-bone">Verified Contact Coordinates</strong>
+                  <p class="text-slate mt-0.5">Valid email, telephone, LinkedIn URL, and JUET institutional domain.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-emerald text-base shrink-0">check_circle</span>
+                <div>
+                  <strong class="text-bone">Accredited Academic Credentials</strong>
+                  <p class="text-slate mt-0.5">B.Tech Computer Science & Engineering, CGPA 8.8 / 10.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Missing Keyword Injector -->
+        <div class="border border-char rounded-xl p-8 bg-surface-dim space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-heading text-xl text-bone">Target Keyword Gap Analysis</h3>
+              <p class="text-xs text-slate mt-1 font-body">Click any missing keyword to instantly inject it into your candidate profile.</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <span class="text-xs font-label text-slate uppercase tracking-wider block mb-2">Verified in Active Resume:</span>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">Python</span>
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">FastAPI</span>
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">FAISS</span>
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">PyTorch</span>
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">Redis</span>
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">PostgreSQL</span>
+                <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">Docker</span>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-char">
+              <span class="text-xs font-label text-amber uppercase tracking-wider block mb-2">Missing High-Demand Skills (Click to Inject):</span>
+              <div class="flex flex-wrap gap-2" id="missing-chips-container">
+                <button onclick="injectSkill('CUDA / GPU Kernels', this)" class="px-3 py-1.5 rounded-full text-xs border border-amber/50 text-amber bg-amber/5 hover:bg-amber/20 transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs">add</span> CUDA / GPU Kernels
+                </button>
+                <button onclick="injectSkill('Quantization (AWQ/GGUF)', this)" class="px-3 py-1.5 rounded-full text-xs border border-amber/50 text-amber bg-amber/5 hover:bg-amber/20 transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs">add</span> Quantization (AWQ/GGUF)
+                </button>
+                <button onclick="injectSkill('Kubernetes Manifests', this)" class="px-3 py-1.5 rounded-full text-xs border border-amber/50 text-amber bg-amber/5 hover:bg-amber/20 transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs">add</span> Kubernetes Manifests
+                </button>
+                <button onclick="injectSkill('OpenTelemetry Tracing', this)" class="px-3 py-1.5 rounded-full text-xs border border-amber/50 text-amber bg-amber/5 hover:bg-amber/20 transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs">add</span> OpenTelemetry Tracing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 5: TELEMETRY & EVENT BUS (Stitch Style)   -->
+      <!-- ============================================== -->
+      <section id="view-telemetry" class="view-panel hidden space-y-8 pb-12">
+        <div>
+          <h1 class="font-heading text-4xl md:text-5xl text-bone tracking-tight mb-2">Architecture Telemetry</h1>
+          <p class="font-body text-slate text-sm">Decoupled Asynchronous Event Bus, Central Model Router, and FAISS Vector Metrics.</p>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-6 rounded-xl border border-char bg-surface-dim">
+            <div class="text-xs text-slate font-label uppercase">Vector Dimension</div>
+            <div id="stat-vector-dim" class="font-heading text-3xl text-bone mt-2">128-D</div>
+            <div class="text-[11px] text-slate mt-1">FAISS IndexFlatIP</div>
+          </div>
+          <div class="p-6 rounded-xl border border-char bg-surface-dim">
+            <div class="text-xs text-slate font-label uppercase">Indexed Roles</div>
+            <div id="stat-jobs-count" class="font-heading text-3xl text-emerald mt-2">5 Roles</div>
+            <div class="text-[11px] text-slate mt-1">Cosine Normalized</div>
+          </div>
+          <div class="p-6 rounded-xl border border-char bg-surface-dim">
+            <div class="text-xs text-slate font-label uppercase">Event Bus Mode</div>
+            <div id="stat-bus-mode" class="font-heading text-lg text-[#ff8400] mt-3 truncate">Decoupled Queue</div>
+            <div class="text-[11px] text-slate mt-1">Asyncio / Redis PubSub</div>
+          </div>
+          <div class="p-6 rounded-xl border border-char bg-surface-dim">
+            <div class="text-xs text-slate font-label uppercase">DB Entities</div>
+            <div id="stat-db-counts" class="font-heading text-3xl text-bone mt-2">14 Tables</div>
+            <div class="text-[11px] text-slate mt-1">SQLAlchemy Relational</div>
+          </div>
+        </div>
+
+        <!-- Event Bus Feed -->
+        <div class="border border-char rounded-xl p-6 bg-surface-dim space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="font-heading text-xl text-bone">Live Event Bus Feed</h3>
+            <button onclick="refreshTelemetry()" class="text-xs text-slate hover:text-bone border border-char px-3 py-1 rounded-full">Refresh</button>
+          </div>
+          <div id="event-feed-box" class="font-mono text-xs text-slate space-y-2 max-h-60 overflow-y-auto bg-obsidian p-4 rounded-lg border border-char">
+            <div><span class="text-[#ff8400]">[SYSTEM_READY]</span> FastAPI Gateway active on port 8000 with FAISS vector store.</div>
+            <div><span class="text-[#ff8400]">[SEED_SUCCESS]</span> Loaded candidate Utkarsh Shah (241B278) & 5 tech companies.</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: JOB DETAILS & TAILORING                 -->
+  <!-- ============================================== -->
+  <div id="job-modal" class="fixed inset-0 bg-obsidian/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeJobModal(event)">
+    <div class="bg-surface-dim border border-char rounded-2xl max-w-xl w-full p-8 relative space-y-6" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-start">
+        <div>
+          <span id="modal-company" class="text-xs font-label uppercase tracking-widest text-slate">Company</span>
+          <h3 id="modal-title" class="font-heading text-2xl text-bone mt-1">Job Title</h3>
+          <p id="modal-location" class="text-xs text-slate mt-1">Location</p>
+        </div>
+        <button onclick="closeJobModal()" class="text-slate hover:text-bone text-2xl leading-none">×</button>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-xs font-label text-slate uppercase tracking-wider">Role Description</h4>
+        <p id="modal-desc" class="text-sm font-body text-slate leading-relaxed"></p>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-xs font-label text-slate uppercase tracking-wider">Required Technical Skills</h4>
+        <div id="modal-skills" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div class="flex gap-4 pt-4 border-t border-char">
+        <button id="modal-tailor-btn" class="flex-1 bg-bone text-obsidian rounded-full py-2.5 font-label text-xs font-bold hover:bg-slate transition-colors flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-sm">auto_fix_high</span> Tailor Resume for This Role
+        </button>
+        <button onclick="closeJobModal()" class="px-6 py-2.5 rounded-full border border-char text-xs text-bone hover:border-bone transition-colors">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: ATS SINGLE-COLUMN RESUME PREVIEW        -->
+  <!-- ============================================== -->
+  <div id="resume-preview-modal" class="fixed inset-0 bg-obsidian/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeResumePreview(event)">
+    <div class="bg-paper text-obsidian rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl" onclick="event.stopPropagation()">
+      
+      <!-- Modal Sticky Header -->
+      <div class="sticky top-0 bg-char text-bone px-8 py-4 flex justify-between items-center border-b border-char z-10">
+        <div class="flex items-center gap-2 text-xs font-label">
+          <span class="material-symbols-outlined text-emerald text-sm">verified</span>
+          <span>ATS Compliant Single-Column Format (94% Compliance)</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="window.print()" class="px-4 py-1.5 rounded-full bg-bone text-obsidian text-xs font-bold hover:bg-slate transition-colors flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">print</span> Print / Export PDF
+          </button>
+          <button onclick="closeResumePreview()" class="text-slate hover:text-bone text-2xl leading-none">×</button>
+        </div>
+      </div>
+
+      <!-- Resume Sheet Body -->
+      <div class="p-10 md:p-14 font-body text-sm text-[#111827] space-y-6">
+        <div class="border-b-2 border-obsidian pb-4">
+          <h1 id="doc-name" class="font-heading text-3xl font-bold text-[#111827] mb-1">Utkarsh Shah</h1>
+          <div class="flex flex-wrap gap-4 text-xs text-[#4b5563] font-mono">
+            <span id="doc-email">utkarsh.shah@juetguna.in</span>
+            <span>•</span>
+            <span id="doc-phone">+91 9876543210</span>
+            <span>•</span>
+            <span>linkedin.com/in/utkarsh-shah</span>
+            <span>•</span>
+            <span>Guna, MP, India</span>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-[#111827] border-b border-[#e5e7eb] pb-1 mb-2">Education</h2>
+          <div class="flex justify-between text-xs font-bold">
+            <span>Jaypee University of Engineering and Technology (JUET), Guna</span>
+            <span>2022 – 2026</span>
+          </div>
+          <div class="text-xs text-[#4b5563]">Bachelor of Technology in Computer Science & Engineering • CGPA: 8.8 / 10.0</div>
+        </div>
+
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-[#111827] border-b border-[#e5e7eb] pb-1 mb-2">Technical Skills</h2>
+          <p id="doc-skills" class="text-xs text-[#374151] leading-relaxed">
+            <strong>Languages & Frameworks:</strong> Python, FastAPI, React, PyTorch, FAISS, TypeScript, SQL, HTML5, CSS3<br>
+            <strong>Databases & Infrastructure:</strong> Redis Pub/Sub, PostgreSQL, Docker, Git, RESTful APIs, Linux/Bash
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-[#111827] border-b border-[#e5e7eb] pb-1 mb-2">Projects & Engineering Experience</h2>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs font-bold">
+                <span>AI-Powered Resume Automation Platform (Minor Project 1)</span>
+                <span>Feb 2026 – Present</span>
+              </div>
+              <div class="text-xs text-[#4b5563] mb-1">JUET Capstone Project • Python, FastAPI, FAISS, Redis, React</div>
+              <ul class="list-disc list-inside text-xs text-[#374151] space-y-1">
+                <li id="doc-bullet-1">Architected an event-driven multi-agent platform using FastAPI and FAISS, reducing semantic matching latency by 42% across candidate profiles with 94% ATS compliance.</li>
+                <li>Engineered 4-factor hybrid ranking algorithm combining 128-D dense embeddings, skill keyword overlap, experience alignment, and candidate preferences.</li>
+                <li>Implemented decoupled event bus supporting Redis Pub/Sub with transparent async in-memory failover.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-[#111827] border-b border-[#e5e7eb] pb-1 mb-2">Certifications & Achievements</h2>
+          <ul class="list-disc list-inside text-xs text-[#374151] space-y-1">
+            <li>Deep Learning Specialization (DeepLearning.AI) • PyTorch, Transformer Architectures</li>
+            <li>Lead Coordinator, JUET ACM Student Chapter & Tech Initiatives (2024–Present)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast-box" class="toast-box"></div>
+
+  <!-- ============================================== -->
+  <!-- JAVASCRIPT LOGIC & API INTEGRATION             -->
+  <!-- ============================================== -->
+  <script>
+    let currentResumeId = null;
+    let allJobs = [];
+    let currentFilter = 'all';
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(b => {
+        b.classList.remove('text-bone', 'border-r-2', 'border-bone');
+        b.classList.add('text-slate');
+      });
+
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.remove('text-slate');
+        activeNav.classList.add('text-bone', 'border-r-2', 'border-bone');
+      }
+
+      const activePanel = document.getElementById('view-' + tabId);
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+      }
+
+      const titles = {
+        'agent': 'Clyde • Career Partner',
+        'resumes': 'Clyde • Your Library',
+        'jobs': 'Clyde • Job Discovery',
+        'ats': 'Clyde • ATS Audit',
+        'telemetry': 'Clyde • Architecture'
+      };
+      if (titles[tabId]) {
+        document.getElementById('page-title').innerText = titles[tabId];
+      }
+
+      if (tabId === 'jobs' && allJobs.length === 0) {
+        fetchJobs();
+      }
+      if (tabId === 'telemetry') {
+        refreshTelemetry();
+      }
+    }
+
+    async function fetchJobs() {
+      try {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        allJobs = data.jobs || [];
+        renderJobs(allJobs);
+      } catch (e) {
+        console.error("Jobs error:", e);
+      }
+    }
+
+    function renderJobs(jobs, matchesMap = {}) {
+      const container = document.getElementById('jobs-grid-container');
+      container.innerHTML = '';
+
+      if (jobs.length === 0) {
+        container.innerHTML = '<div class="col-span-2 text-center text-slate text-sm py-12">No roles match the selected filter.</div>';
+        return;
+      }
+
+      jobs.forEach(job => {
+        const match = matchesMap[job.job_id];
+        const score = match ? match.overall_score : null;
+        const matchingSkills = match ? match.matching_skills : (job.required_skills ? job.required_skills.slice(0, 3) : []);
+        const missingSkills = match ? match.missing_skills : (job.required_skills ? job.required_skills.slice(3) : []);
+
+        const card = document.createElement('article');
+        card.className = "border border-char hover:border-bone rounded-xl p-6 bg-surface-dim transition-all flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <span class="text-xs font-label uppercase tracking-widest text-slate">${job.company} • ${job.industry || 'Technology'}</span>
+                <h3 class="font-heading text-xl text-bone mt-0.5">${job.title}</h3>
+                <p class="text-xs text-slate mt-1">${job.location}</p>
+              </div>
+              ${score ? `
+                <div class="w-12 h-12 rounded-full bg-solstice-gradient flex items-center justify-center text-obsidian font-heading font-bold text-base shadow-[0_0_15px_rgba(255,132,0,0.3)] shrink-0">
+                  ${score}%
+                </div>
+              ` : `
+                <div class="px-3 py-1 rounded-full border border-char text-[11px] text-slate font-mono">Unranked</div>
+              `}
+            </div>
+
+            <p class="text-xs text-slate font-body line-clamp-2 mb-4 leading-relaxed">${job.description}</p>
+
+            <div class="space-y-2 mb-4">
+              <div class="flex flex-wrap gap-1.5">
+                ${matchingSkills.map(s => `<span class="px-2.5 py-0.5 rounded-full text-[11px] border border-emerald/40 text-emerald bg-emerald/5">${s}</span>`).join('')}
+                ${missingSkills.map(s => `<span class="px-2.5 py-0.5 rounded-full text-[11px] border border-amber/40 text-amber bg-amber/5">${s}</span>`).join('')}
+              </div>
+              ${match && match.reason ? `
+                <p class="text-[11px] text-slate italic bg-obsidian p-2 rounded border border-char/60 font-body">${match.reason}</p>
+              ` : ''}
+            </div>
+          </div>
+
+          <div class="flex gap-2 pt-4 border-t border-char mt-auto">
+            <button onclick="openJobModal('${job.job_id}')" class="flex-1 py-1.5 rounded-full border border-char text-xs text-bone hover:border-bone transition-colors">
+              Details
+            </button>
+            <button onclick="quickTailorResume('${job.title}', '${job.company}')" class="px-4 py-1.5 rounded-full bg-bone text-obsidian text-xs font-bold hover:bg-slate transition-colors">
+              Tailor
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function triggerJobMatch() {
+      switchTab('jobs');
+      const btnText = document.getElementById('match-btn-text');
+      btnText.innerText = 'Running FAISS Vectors...';
+
+      if (!currentResumeId) {
+        await loadDemoResume(false);
+      }
+
+      try {
+        const res = await fetch('/api/jobs/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: 'usr-utkarsh-241b278',
+            resume_id: currentResumeId
+          })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          const matchesMap = {};
+          data.matches.forEach(m => { matchesMap[m.job_id] = m; });
+
+          allJobs.sort((a, b) => {
+            const scoreA = matchesMap[a.job_id]?.overall_score || 0;
+            const scoreB = matchesMap[b.job_id]?.overall_score || 0;
+            return scoreB - scoreA;
+          });
+
+          renderJobs(allJobs, matchesMap);
+          showToast(`FAISS match complete! Top: ${data.matches[0].title} (${data.matches[0].overall_score}%)`);
+          logEvent('MATCH_COMPUTED', `4-factor hybrid ranking computed across ${data.total_matches} roles.`);
+        }
+      } catch (e) {
+        showToast("Job matching error", true);
+      } finally {
+        btnText.innerText = 'Run FAISS Multi-Factor Match';
+      }
+    }
+
+    function applyJobFilter(filter, el) {
+      document.querySelectorAll('.filter-chip').forEach(c => {
+        c.className = "filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors";
+      });
+      if (el) {
+        el.className = "filter-chip px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-xs font-bold transition-colors";
+      }
+      currentFilter = filter;
+
+      let filtered = allJobs;
+      if (filter === 'ai') filtered = allJobs.filter(j => j.title.toLowerCase().includes('ai') || j.title.toLowerCase().includes('learning'));
+      else if (filter === 'distributed') filtered = allJobs.filter(j => j.title.toLowerCase().includes('distributed') || j.title.toLowerCase().includes('backend') || j.title.toLowerCase().includes('cloud'));
+      else if (filter === 'bangalore') filtered = allJobs.filter(j => j.location.toLowerCase().includes('bangalore'));
+      else if (filter === 'remote') filtered = allJobs.filter(j => j.location.toLowerCase().includes('remote') || j.location.toLowerCase().includes('hybrid'));
+
+      renderJobs(filtered);
+    }
+
+    function handleJobSearch(e) {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        applyJobFilter(currentFilter);
+        return;
+      }
+      const filtered = allJobs.filter(j => 
+        j.title.toLowerCase().includes(q) || 
+        j.company.toLowerCase().includes(q) || 
+        (j.required_skills && j.required_skills.some(s => s.toLowerCase().includes(q)))
+      );
+      renderJobs(filtered);
+    }
+
+    function filterBySkill(skill) {
+      switchTab('jobs');
+      const input = document.getElementById('job-search-input');
+      input.value = skill;
+      handleJobSearch({ target: input });
+    }
+
+    function quickTailorResume(role, company) {
+      switchTab('agent');
+      const prompt = `Please tailor my resume for the ${role} position at ${company}. Highlight relevant projects and optimize bullet points for ATS compliance.`;
+      sendQuickPrompt(prompt);
+    }
+
+    function openJobModal(jobId) {
+      const job = allJobs.find(j => j.job_id === jobId);
+      if (!job) return;
+
+      document.getElementById('modal-company').innerText = job.company;
+      document.getElementById('modal-title').innerText = job.title;
+      document.getElementById('modal-location').innerText = job.location + " • " + (job.experience_level || 'Entry-Level');
+      document.getElementById('modal-desc').innerText = job.description;
+
+      const skillsBox = document.getElementById('modal-skills');
+      skillsBox.innerHTML = (job.required_skills || []).map(s => `<span class="px-3 py-1 rounded-full text-xs border border-char text-bone">${s}</span>`).join('');
+
+      document.getElementById('modal-tailor-btn').onclick = () => {
+        closeJobModal();
+        quickTailorResume(job.title, job.company);
+      };
+
+      const modal = document.getElementById('job-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeJobModal() {
+      const modal = document.getElementById('job-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function openResumePreview() {
+      const modal = document.getElementById('resume-preview-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeResumePreview() {
+      const modal = document.getElementById('resume-preview-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function applyOptimizedBullet() {
+      const docBullet = document.getElementById('doc-bullet-1');
+      const optimizedText = document.getElementById('bullet-optimized-text').innerText;
+      if (docBullet) docBullet.innerText = optimizedText;
+
+      const btn = document.getElementById('apply-bullet-btn');
+      btn.innerText = 'Applied ✓';
+      btn.className = "px-4 py-1 rounded-full border border-emerald text-emerald font-label text-xs font-bold";
+
+      const score = document.getElementById('resume-ats-score');
+      if (score) score.innerText = '98%';
+
+      showToast("XYZ bullet applied! Baseline ATS elevated to 98%.");
+      logEvent('BULLET_OPTIMIZED', 'Applied high-impact XYZ quantified bullet to active resume.');
+    }
+
+    function injectSkill(skill, el) {
+      if (el.dataset.added) {
+        showToast(`Skill '${skill}' already added.`);
+        return;
+      }
+      el.dataset.added = "true";
+      el.className = "px-3 py-1.5 rounded-full text-xs border border-emerald/50 text-emerald bg-emerald/5 flex items-center gap-1.5";
+      el.innerHTML = `<span class="material-symbols-outlined text-xs">check</span> ${skill} (Added)`;
+
+      const list = document.getElementById('skills-list-container');
+      if (list) {
+        const pill = document.createElement('span');
+        pill.className = "px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer";
+        pill.innerText = skill;
+        pill.onclick = () => filterBySkill(skill);
+        list.appendChild(pill);
+      }
+
+      const badge = document.getElementById('skills-count-badge');
+      if (badge) {
+        const c = parseInt(badge.innerText) || 12;
+        badge.innerText = (c + 1) + " Skills";
+      }
+
+      const docSkills = document.getElementById('doc-skills');
+      if (docSkills) docSkills.innerHTML += `, ${skill}`;
+
+      const score = document.getElementById('resume-ats-score');
+      if (score) score.innerText = '97%';
+
+      showToast(`Injected '${skill}' into profile!`);
+      logEvent('SKILL_INJECTED', `Injected target keyword '${skill}'.`);
+    }
+
+    async function loadDemoResume(showNotification = true) {
+      try {
+        const sampleText = `Utkarsh Shah
+Email: utkarsh.shah@juetguna.in
+Phone: +91 9876543210
+Education: Jaypee University of Engineering & Technology, Guna. B.Tech in Computer Science & Engineering, CGPA: 8.8 / 10, Class of 2026.
+Technical Skills: Python, FastAPI, React, PyTorch, FAISS, Docker, Git, Redis, PostgreSQL, SQL, TypeScript, REST APIs.
+Projects: AI-Powered Resume Automation Platform. Engineered an event-driven multi-agent platform for resume optimization and semantic job matching. Technologies: FastAPI, FAISS, Redis, PostgreSQL, React, TypeScript.`;
+
+        const blob = new Blob([sampleText], { type: 'application/pdf' });
+        const formData = new FormData();
+        formData.append('file', blob, 'Utkarsh_Shah_Resume.pdf');
+        formData.append('user_id', 'usr-utkarsh-241b278');
+
+        const res = await fetch('/api/resumes/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          currentResumeId = data.resume_id;
+          document.getElementById('profile-name').innerText = data.profile.name;
+          document.getElementById('profile-email').innerText = data.profile.email;
+          document.getElementById('profile-phone').innerText = data.profile.phone;
+          document.getElementById('resume-ats-score').innerText = Math.round(data.ats_score) + '%';
+          document.getElementById('skills-count-badge').innerText = data.profile.skills_count + ' Skills';
+
+          const skillsContainer = document.getElementById('skills-list-container');
+          skillsContainer.innerHTML = data.profile.skills.map(s => 
+            `<span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('${s}')">${s}</span>`
+          ).join('');
+
+          logEvent('RESUME_UPLOADED', `Resume parsed. ID: ${data.resume_id}. Baseline ATS: ${data.ats_score}%.`);
+
+          if (showNotification) {
+            showToast(`Profile loaded for Utkarsh Shah (94% ATS Score)`);
+            switchTab('resumes');
+          }
+        }
+      } catch (e) {
+        showToast("Failed to load demo resume", true);
+      }
+    }
+
+    async function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      showToast(`Uploading ${file.name}...`);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('user_id', 'usr-utkarsh-241b278');
+
+      try {
+        const res = await fetch('/api/resumes/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          currentResumeId = data.resume_id;
+          document.getElementById('profile-name').innerText = data.profile.name;
+          document.getElementById('profile-email').innerText = data.profile.email || 'Email extracted';
+          document.getElementById('profile-phone').innerText = data.profile.phone || 'Phone extracted';
+          document.getElementById('resume-ats-score').innerText = Math.round(data.ats_score) + '%';
+          document.getElementById('skills-count-badge').innerText = data.profile.skills_count + ' Skills';
+
+          const skillsContainer = document.getElementById('skills-list-container');
+          skillsContainer.innerHTML = data.profile.skills.map(s => 
+            `<span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('${s}')">${s}</span>`
+          ).join('');
+
+          logEvent('RESUME_UPLOADED', `Uploaded '${file.name}'. Generated candidate profile.`);
+          showToast(`Resume uploaded! ${data.profile.skills_count} skills extracted.`);
+          switchTab('resumes');
+        }
+      } catch (e) {
+        showToast("Upload failed: " + e.message, true);
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      // Hide hero state and reveal messages container
+      document.getElementById('hero-state').classList.add('hidden');
+      const msgBox = document.getElementById('messages-container');
+      msgBox.classList.remove('hidden');
+
+      appendChatBubble('user', msg);
+      input.value = '';
+
+      const loadingId = appendChatBubble('assistant', '<div class="typing-dots"><span></span><span></span><span></span></div> Clyde is orchestrating workflow...', 'Orchestrator Agent');
+
+      try {
+        const res = await fetch('/api/agent/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: 'usr-utkarsh-241b278',
+            message: msg
+          })
+        });
+
+        const data = await res.json();
+        const loadingEl = document.getElementById(loadingId);
+        if (loadingEl) loadingEl.remove();
+
+        appendChatBubble('assistant', data.reply, data.agent_name, data.provider_used, data.latency_ms);
+        logEvent('AGENT_DISPATCH', `${data.agent_name} replied via ${data.provider_used} in ${data.latency_ms}ms.`);
+      } catch (e) {
+        const loadingEl = document.getElementById(loadingId);
+        if (loadingEl) loadingEl.innerHTML = "Agent offline mode: Task queued on Event Bus.";
+      }
+    }
+
+    function sendQuickPrompt(text) {
+      document.getElementById('chat-input').value = text;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function appendChatBubble(role, content, agent = 'Orchestrator Agent', provider = 'GLM', latency = 120) {
+      const container = document.getElementById('messages-container');
+      const bubble = document.createElement('div');
+      const bubbleId = 'bubble-' + Date.now();
+      bubble.id = bubbleId;
+
+      if (role === 'user') {
+        bubble.className = "flex justify-end";
+        bubble.innerHTML = `
+          <div class="max-w-xl bg-char text-bone px-5 py-3 rounded-2xl rounded-tr-none text-sm font-body border border-char">
+            ${content}
+          </div>
+        `;
+      } else {
+        bubble.className = "flex justify-start";
+        bubble.innerHTML = `
+          <div class="max-w-2xl bg-surface-dim text-bone p-6 rounded-2xl rounded-tl-none border border-char space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate border-b border-char pb-2 font-mono">
+              <span class="text-[#ff8400] font-bold">${agent}</span>
+              <span>${provider} • ${latency}ms</span>
+            </div>
+            <div class="text-sm font-body leading-relaxed whitespace-pre-line">${content}</div>
+            <div class="flex items-center gap-3 pt-2 text-xs text-slate">
+              <button onclick="copyToClipboard('${content.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')" class="hover:text-bone flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">content_copy</span> Copy
+              </button>
+              <button onclick="showToast('Feedback recorded!')" class="hover:text-bone flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">thumb_up</span> Helpful
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      container.appendChild(bubble);
+      const streamBox = document.getElementById('chat-stream-box');
+      streamBox.scrollTop = streamBox.scrollHeight;
+      return bubbleId;
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+      showToast("Copied to clipboard!");
+    }
+
+    function showToast(msg, isError = false) {
+      const container = document.getElementById('toast-box');
+      const toast = document.createElement('div');
+      toast.className = "toast-item";
+      if (isError) toast.style.borderColor = "#f43f5e";
+      toast.innerHTML = `
+        <span class="material-symbols-outlined text-sm ${isError ? 'text-rose' : 'text-emerald'}">
+          ${isError ? 'error' : 'check_circle'}
+        </span>
+        <span>${msg}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        toast.style.transition = 'all 0.25s ease';
+        setTimeout(() => toast.remove(), 250);
+      }, 3200);
+    }
+
+    async function refreshTelemetry() {
+      try {
+        const res = await fetch('/api/telemetry/health');
+        const data = await res.json();
+
+        document.getElementById('stat-vector-dim').innerText = data.vector_store.dimension + '-D';
+        document.getElementById('stat-jobs-count').innerText = data.vector_store.jobs_indexed + ' Roles';
+        document.getElementById('stat-bus-mode').innerText = data.event_bus.mode.includes('Redis') ? 'Redis Pub/Sub' : 'Decoupled Queue';
+        document.getElementById('stat-db-counts').innerText = data.database_metrics.jobs + ' Jobs, ' + data.database_metrics.resumes + ' Resumes';
+      } catch (e) {
+        console.error("Telemetry error:", e);
+      }
+    }
+
+    function logEvent(type, text) {
+      const box = document.getElementById('event-feed-box');
+      if (!box) return;
+      const item = document.createElement('div');
+      item.innerHTML = `<span class="text-[#ff8400]">[${type}]</span> ${text}`;
+      box.prepend(item);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeJobModal();
+        closeResumePreview();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchJobs();
+      refreshTelemetry();
+    });
+  </script>
+</body>
+</html>

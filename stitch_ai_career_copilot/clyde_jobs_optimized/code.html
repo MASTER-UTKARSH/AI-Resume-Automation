@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clyde - Job Discovery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#757575",
+                      "inverse-surface": "#e2e2e2",
+                      "on-primary-fixed-variant": "#474747",
+                      "on-secondary-fixed": "#1a1c1b",
+                      "on-error-container": "#ffdad6",
+                      "secondary": "#c6c7c5",
+                      "on-surface-variant": "#cfc4c5",
+                      "bone": "#f6f6f4",
+                      "inverse-primary": "#5e5e5e",
+                      "secondary-container": "#454746",
+                      "char": "#1a1a1a",
+                      "outline": "#988e90",
+                      "slate": "#7d7d7d",
+                      "surface-dim": "#131313",
+                      "surface-container-high": "#2a2a2a",
+                      "on-secondary": "#2f3130",
+                      "secondary-fixed": "#e2e3e1",
+                      "inverse-on-surface": "#303030",
+                      "primary-container": "#000000",
+                      "on-secondary-container": "#b4b5b4",
+                      "paper": "#ffffff",
+                      "tertiary": "#c6c6c6",
+                      "primary": "#c6c6c6",
+                      "tertiary-container": "#000000",
+                      "error-container": "#93000a",
+                      "error": "#ffb4ab",
+                      "obsidian": "#000000",
+                      "on-secondary-fixed-variant": "#454746",
+                      "background": "#131313",
+                      "on-tertiary-fixed-variant": "#474747",
+                      "solstice-gradient": "linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%)",
+                      "on-tertiary": "#303030",
+                      "surface": "#131313",
+                      "surface-bright": "#393939",
+                      "surface-container-highest": "#353535",
+                      "surface-container-low": "#1b1b1b",
+                      "secondary-fixed-dim": "#c6c7c5",
+                      "surface-tint": "#c6c6c6",
+                      "primary-fixed": "#e2e2e2",
+                      "tertiary-fixed": "#e2e2e2",
+                      "on-surface": "#e2e2e2",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "on-tertiary-fixed": "#1b1b1b",
+                      "on-primary-container": "#757575",
+                      "outline-variant": "#4c4546",
+                      "on-background": "#e2e2e2",
+                      "on-primary": "#303030",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "on-primary-fixed": "#1b1b1b",
+                      "surface-variant": "#353535",
+                      "on-error": "#690005",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-container": "#1f1f1f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "64px",
+                      "xs": "20px",
+                      "max-width": "1200px",
+                      "md": "44px",
+                      "sm": "24px",
+                      "xxl": "144px",
+                      "section-gap": "80px",
+                      "xl": "92px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "heading": [
+                              "Recoleta"
+                      ],
+                      "body": [
+                              "Oldschool Grotesk"
+                      ],
+                      "body-lg": [
+                              "Oldschool Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Recoleta"
+                      ],
+                      "heading-sm": [
+                              "Recoleta"
+                      ],
+                      "display": [
+                              "Recoleta"
+                      ],
+                      "subheading": [
+                              "Recoleta"
+                      ],
+                      "headline-lg": [
+                              "Recoleta"
+                      ],
+                      "label": [
+                              "Oldschool Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "heading": [
+                              "61px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-1.22px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "-0.16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "21px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.42px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-1.5px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "heading-sm": [
+                              "47px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.94px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "125px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "-3.75px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "subheading": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.36px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "80px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "-2.4px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label": [
+                              "15px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0.15px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #f6f6f4;
+            font-family: 'Oldschool Grotesk', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Recoleta', serif;
+        }
+        
+        .bg-solstice-gradient {
+            background-image: linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%);
+        }
+        .text-solstice-gradient {
+            background-image: linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Custom Scrollbar for sleek look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #454746;
+        }
+    </style>
+</head>
+<body class="bg-obsidian min-h-screen flex text-bone">
+<!-- SideNavBar -->
+<nav class="bg-obsidian dark:bg-obsidian border-r border-char dark:border-char h-screen w-20 fixed left-0 top-0 flex flex-col py-xl px-0 z-50">
+<div class="mb-12 hidden">
+<h1 class="font-heading text-subheading text-bone tracking-tighter hidden">Clyde</h1>
+</div>
+<ul class="flex flex-col gap-4 flex-grow items-center">
+<li class="">
+<a class="flex items-center p-2 text-slate hover:text-bone transition-colors duration-200 justify-center" href="#">
+<span class="material-symbols-outlined">add_comment</span>
+<span class="font-label text-label hidden">New Chat</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center p-2 text-slate hover:text-bone transition-colors duration-200 justify-center" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label text-label hidden">Chat History</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center text-bone font-bold border-r-2 border-bone pb-1 scale-95 transition-transform justify-center" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">work</span>
+<span class="font-label text-label hidden">Jobs</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center p-2 text-slate hover:text-bone transition-colors duration-200 justify-center" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label text-label hidden">Resumes</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center p-2 text-slate hover:text-bone transition-colors duration-200 justify-center" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-label text-label hidden">Applications</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center p-2 text-slate hover:text-bone transition-colors duration-200 mt-auto justify-center" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label text-label hidden">Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-8 border-t border-char pt-4 flex items-center justify-center hidden">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-char overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A striking portrait of a sophisticated professional in a high-end, minimalist studio environment. The lighting is dramatic and achomatic, featuring deep shadows and stark white highlights to emphasize sculpted facial features. The background is a seamless, dark obsidian void, directing all focus to the subject. The overall mood conveys authoritative calm and timeless elegance, aligning perfectly with a premium Dark Editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6SBe4tGT2MXS7bm0xh55thEqAwFSloRFdcItwsAGvUHrtLu9Yks0YnDkmwzeiHTN8WPvLZZxRWmT0kdocCUHflpQVb-VD7iID4hNTmsexC-heKcAEDmiBSjDPiaL9t12w5pHaIm-NDVJbfPTmmYxFhgikW73Hx2GsZYFAGM44PkyLppplcln65Mvh-L2FHbEICmWT5BKY7zZihJqYFLD9m2Ai7wUhUU-SLvDFzQJ_2fbn0a5WfKfeIUy31RiW5gShUbjj-GGSr24"/>
+</div>
+<div class="hidden">
+<div class="font-label text-label text-bone">Clyde</div>
+<div class="text-xs text-slate font-body">AI Career Partner</div>
+</div>
+</div>
+<button class="px-4 py-2 rounded-full border border-bone text-bone text-xs font-label hover:bg-bone hover:text-obsidian transition-colors hidden">Upgrade to Pro</button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-20 w-[calc(100%-80px)] flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-lg py-sm bg-transparent docked top-0 z-40">
+<div>
+<h2 class="font-heading text-subheading text-bone">Job Discovery</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate text-sm">search</span>
+<input class="bg-char text-bone border border-char rounded pl-10 pr-4 py-2 font-body text-body w-64 focus:outline-none focus:border-bone transition-colors" placeholder="Search roles, companies..." type="text"/>
+</div>
+<button class="text-bone hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-bone hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Discovery Content -->
+<div class="grid grid-cols-12 flex-1 px-lg pb-lg gap-8 h-[calc(100vh-100px)] overflow-hidden">
+<!-- Left Column: Filters -->
+<aside class="col-span-2 flex flex-col gap-8 h-full overflow-y-auto pr-4">
+<div>
+<h3 class="font-label text-label text-slate mb-4 uppercase tracking-widest text-xs">Role Type</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-label text-sm transition-colors">Product Design</button>
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">UX Research</button>
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">UI Engineer</button>
+</div>
+</div>
+<div>
+<h3 class="font-label text-label text-slate mb-4 uppercase tracking-widest text-xs">Location</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-label text-sm transition-colors">Remote</button>
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">New York</button>
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">San Francisco</button>
+</div>
+</div>
+<div>
+<h3 class="font-label text-label text-slate mb-4 uppercase tracking-widest text-xs">Experience</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">Junior</button>
+<button class="px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-label text-sm transition-colors">Mid-Level</button>
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">Senior</button>
+<button class="px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-label text-sm transition-colors">Lead</button>
+</div>
+</div>
+</aside>
+<!-- Center Column: Job Grid -->
+<section class="col-span-5 h-full overflow-y-auto pr-4">
+<div class="grid grid-cols-1 gap-6">
+<!-- Job Card 1 (Active) -->
+<article class="bg-bone text-obsidian rounded-[16px] p-4 relative border border-char cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-heading text-body-lg font-bold leading-tight mb-1">Senior Product Designer</h4>
+<p class="font-body text-label text-slate">Stripe • Remote</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-solstice-gradient flex items-center justify-center text-obsidian font-heading font-bold text-lg shadow-[0_0_15px_rgba(255,132,0,0.3)]">
+                                94
+                            </div>
+</div>
+<div class="mb-4">
+<p class="font-label text-xs text-slate uppercase tracking-widest mb-2">ATS Insights</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded border border-char text-xs font-label">Missing: "Figma Variables"</span>
+<span class="px-2 py-1 rounded bg-[#dcfce7] text-[#166534] text-xs font-label">Strong: "Design Systems"</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-char/20">
+<span class="font-label text-label text-slate">$160k - $210k</span>
+<button class="px-6 py-2 rounded-full border border-obsidian text-obsidian font-label text-sm hover:bg-obsidian hover:text-bone transition-colors">Save Job</button>
+</div>
+</article>
+<!-- Job Card 2 -->
+<article class="bg-bone text-obsidian rounded-[16px] p-4 relative border border-char cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-heading text-body-lg font-bold leading-tight mb-1">UX/UI Designer</h4>
+<p class="font-body text-label text-slate">Airbnb • San Francisco, CA</p>
+</div>
+<div class="w-12 h-12 rounded-full border-2 border-[#ff8400] flex items-center justify-center text-obsidian font-heading font-bold text-lg">
+                                82
+                            </div>
+</div>
+<div class="mb-4">
+<p class="font-label text-xs text-slate uppercase tracking-widest mb-2">ATS Insights</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded border border-char text-xs font-label">Missing: "Prototyping"</span>
+<span class="px-2 py-1 rounded border border-char text-xs font-label">Missing: "User Testing"</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-char/20">
+<span class="font-label text-label text-slate">$140k - $180k</span>
+<button class="px-6 py-2 rounded-full border border-obsidian text-obsidian font-label text-sm hover:bg-obsidian hover:text-bone transition-colors">Save Job</button>
+</div>
+</article>
+<!-- Job Card 3 -->
+<article class="bg-bone text-obsidian rounded-[16px] p-4 relative border border-char cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-heading text-body-lg font-bold leading-tight mb-1">Product Design Lead</h4>
+<p class="font-body text-label text-slate">Linear • Remote</p>
+</div>
+<div class="w-12 h-12 rounded-full border-2 border-[#df91f7] flex items-center justify-center text-obsidian font-heading font-bold text-lg">
+                                88
+                            </div>
+</div>
+<div class="mb-4">
+<p class="font-label text-xs text-slate uppercase tracking-widest mb-2">ATS Insights</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded bg-[#dcfce7] text-[#166534] text-xs font-label">Strong: "Leadership"</span>
+<span class="px-2 py-1 rounded bg-[#dcfce7] text-[#166534] text-xs font-label">Strong: "Strategy"</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-char/20">
+<span class="font-label text-label text-slate">$180k - $240k</span>
+<button class="px-6 py-2 rounded-full border border-obsidian text-obsidian font-label text-sm hover:bg-obsidian hover:text-bone transition-colors">Save Job</button>
+</div>
+</article>
+</div>
+</section>
+<!-- Right Side: Detailed Panel -->
+<aside class="col-span-5 bg-char rounded-[16px] p-sm h-full overflow-y-auto border border-surface-bright flex flex-col relative">
+<div class="mb-8">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 bg-bone rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-obsidian text-3xl">payments</span>
+</div>
+<button class="text-slate hover:text-bone"><span class="material-symbols-outlined">ios_share</span></button>
+</div>
+<h2 class="font-heading text-subheading mb-2 leading-none">Senior Product Designer</h2>
+<p class="font-body text-body text-slate mb-4">Stripe • Remote</p>
+<div class="flex gap-4 border-b border-surface-bright pb-6 mb-6">
+<div>
+<p class="font-label text-xs text-slate uppercase tracking-widest mb-1">Salary</p>
+<p class="font-body text-bone">$160k - $210k</p>
+</div>
+<div class="w-px bg-surface-bright"></div>
+<div>
+<p class="font-label text-xs text-slate uppercase tracking-widest mb-1">Type</p>
+<p class="font-body text-bone">Full-Time</p>
+</div>
+<div class="w-px bg-surface-bright"></div>
+<div>
+<p class="font-label text-xs text-slate uppercase tracking-widest mb-1">Posted</p>
+<p class="font-body text-bone">2d ago</p>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="font-heading text-body-lg mb-3">About the Role</h3>
+<p class="font-body text-label text-slate mb-4">
+                        We're looking for a Senior Product Designer to join our core payments team. You will be responsible for end-to-end product design, from initial concept to high-fidelity prototyping and collaborating deeply with engineering.
+                    </p>
+<button class="text-bone font-label text-sm underline hover:text-slate">Read full description</button>
+</div>
+<!-- Recommend Resume Section -->
+<div class="mt-auto bg-obsidian rounded-lg p-4 border border-surface-bright">
+<h4 class="font-heading text-body-lg mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-solstice-gradient">auto_awesome</span>
+                        Recommend Resume
+                    </h4>
+<p class="font-body text-xs text-slate mb-4">Clyde suggests tailoring your "Tech Focused" resume to highlight missing keywords before applying.</p>
+<div class="bg-char p-3 rounded border border-surface-bright mb-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate">description</span>
+<div>
+<p class="font-label text-sm text-bone">Tech Focused v2</p>
+<p class="font-label text-xs text-slate">Last updated 1w ago</p>
+</div>
+</div>
+<button class="text-bone hover:text-slate"><span class="material-symbols-outlined">edit</span></button>
+</div>
+<button class="w-full py-3 rounded-full bg-bone text-obsidian font-label text-sm hover:bg-slate transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">send</span>
+                        Apply with Clyde
+                    </button>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

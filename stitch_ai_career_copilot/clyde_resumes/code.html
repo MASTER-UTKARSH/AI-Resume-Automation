@@ -1,0 +1,363 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Clyde - Resumes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#757575",
+                        "inverse-surface": "#e2e2e2",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1a1c1b",
+                        "on-error-container": "#ffdad6",
+                        "secondary": "#c6c7c5",
+                        "on-surface-variant": "#cfc4c5",
+                        "bone": "#f6f6f4",
+                        "inverse-primary": "#5e5e5e",
+                        "secondary-container": "#454746",
+                        "char": "#1a1a1a",
+                        "outline": "#988e90",
+                        "slate": "#7d7d7d",
+                        "surface-dim": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary": "#2f3130",
+                        "secondary-fixed": "#e2e3e1",
+                        "inverse-on-surface": "#303030",
+                        "primary-container": "#000000",
+                        "on-secondary-container": "#b4b5b4",
+                        "paper": "#ffffff",
+                        "tertiary": "#c6c6c6",
+                        "primary": "#c6c6c6",
+                        "tertiary-container": "#000000",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "obsidian": "#000000",
+                        "on-secondary-fixed-variant": "#454746",
+                        "background": "#131313",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "solstice-gradient": "linear-gradient(90deg, #feed7a 0%, #ff8400 48.96%, #df91f7 100%)",
+                        "on-tertiary": "#303030",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "surface-container-highest": "#353535",
+                        "surface-container-low": "#1b1b1b",
+                        "secondary-fixed-dim": "#c6c7c5",
+                        "surface-tint": "#c6c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface": "#e2e2e2",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "on-primary-container": "#757575",
+                        "outline-variant": "#4c4546",
+                        "on-background": "#e2e2e2",
+                        "on-primary": "#303030",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-variant": "#353535",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container": "#1f1f1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "64px",
+                        "xs": "20px",
+                        "max-width": "1200px",
+                        "md": "44px",
+                        "sm": "24px",
+                        "xxl": "144px",
+                        "section-gap": "80px",
+                        "xl": "92px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "heading": ["Recoleta"],
+                        "body": ["Oldschool Grotesk"],
+                        "body-lg": ["Oldschool Grotesk"],
+                        "headline-lg-mobile": ["Recoleta"],
+                        "heading-sm": ["Recoleta"],
+                        "display": ["Recoleta"],
+                        "subheading": ["Recoleta"],
+                        "headline-lg": ["Recoleta"],
+                        "label": ["Oldschool Grotesk"]
+                    },
+                    "fontSize": {
+                        "heading": ["61px", {"lineHeight": "1.1", "letterSpacing": "-1.22px", "fontWeight": "400"}],
+                        "body": ["16px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                        "body-lg": ["21px", {"lineHeight": "1.3", "letterSpacing": "-0.42px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["48px", {"lineHeight": "1.1", "letterSpacing": "-1.5px", "fontWeight": "400"}],
+                        "heading-sm": ["47px", {"lineHeight": "1.1", "letterSpacing": "-0.94px", "fontWeight": "400"}],
+                        "display": ["125px", {"lineHeight": "1.0", "letterSpacing": "-3.75px", "fontWeight": "400"}],
+                        "subheading": ["36px", {"lineHeight": "1.1", "letterSpacing": "-0.36px", "fontWeight": "400"}],
+                        "headline-lg": ["80px", {"lineHeight": "1.0", "letterSpacing": "-2.4px", "fontWeight": "400"}],
+                        "label": ["15px", {"lineHeight": "1.6", "letterSpacing": "0.15px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oldschool+Grotesk:wght@100..900&amp;family=Recoleta:wght@100..900&amp;display=swap" rel="stylesheet">
+<style>
+        @font-face {
+            font-family: 'Recoleta';
+            src: url('https://fonts.cdnfonts.com/s/72957/Recoleta-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Oldschool Grotesk';
+            src: url('https://fonts.cdnfonts.com/s/112678/OldschoolGrotesk-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        body { background-color: #000000; color: #f6f6f4; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="font-body text-bone antialiased selection:bg-slate selection:text-obsidian flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-obsidian dark:bg-obsidian border-r border-char dark:border-char h-screen w-20 fixed left-0 top-0 flex flex-col py-xl px-0 z-50">
+<div class="mb-12 hidden">
+<h1 class="font-heading text-subheading text-bone dark:text-bone tracking-tighter">Clyde</h1>
+<p class="font-body text-label text-slate mt-1">AI Career Partner</p>
+</div>
+<div class="flex-grow space-y-4">
+<a class="flex items-center justify-center text-slate dark:text-slate p-2 hover:text-bone dark:hover:text-bone transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-xl group-active:scale-95 transition-transform">add_comment</span>
+<span class="font-label text-label hidden">New Chat</span>
+</a>
+<a class="flex items-center justify-center text-slate dark:text-slate p-2 hover:text-bone dark:hover:text-bone transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-xl group-active:scale-95 transition-transform">history</span>
+<span class="font-label text-label hidden">Chat History</span>
+</a>
+<a class="flex items-center justify-center text-slate dark:text-slate p-2 hover:text-bone dark:hover:text-bone transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-xl group-active:scale-95 transition-transform">work</span>
+<span class="font-label text-label hidden">Jobs</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center justify-center text-slate dark:text-slate p-2 hover:text-bone dark:hover:text-bone transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-xl group-active:scale-95 transition-transform" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-label text-label hidden">Resumes</span>
+</a>
+<a class="flex items-center justify-center text-slate dark:text-slate p-2 hover:text-bone dark:hover:text-bone transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-xl group-active:scale-95 transition-transform">assignment_turned_in</span>
+<span class="font-label text-label hidden">Applications</span>
+</a>
+<a class="flex items-center justify-center text-slate dark:text-slate p-2 hover:text-bone dark:hover:text-bone transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-xl group-active:scale-95 transition-transform">settings</span>
+<span class="font-label text-label hidden">Settings</span>
+</a>
+</div>
+<div class="mt-8 pt-6 border-t border-char hidden">
+<button class="w-full bg-bone text-obsidian rounded-full py-3 px-6 font-label text-label font-bold hover:bg-slate transition-colors">
+                Upgrade to Pro
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow ml-20 min-h-screen pb-xxl">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-transparent docked full-width top-0 flex justify-between items-center w-full px-lg py-sm z-40 sticky">
+<div class="flex items-center">
+<!-- Branding suppressed on Desktop due to SideNav, but keeping structure as per JSON -->
+</div>
+<div class="flex items-center space-x-6">
+<button class="text-bone dark:text-bone hover:opacity-80 transition-opacity active:opacity-70">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+<button class="text-bone dark:text-bone hover:opacity-80 transition-opacity active:opacity-70">
+<span class="material-symbols-outlined text-3xl">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="px-lg mt-xl max-w-max-width mx-auto">
+<h1 class="font-heading text-headline-lg-mobile md:text-headline-lg text-bone mb-lg tracking-tighter">Your Library</h1>
+<!-- Upload Section -->
+<section class="mb-xxl">
+<div class="w-full border border-dashed border-bone rounded-xl flex flex-col items-center justify-center py-xxl px-sm hover:bg-char transition-colors cursor-pointer group">
+<div class="bg-obsidian border border-bone rounded-full p-4 mb-6 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-3xl text-bone">upload_file</span>
+</div>
+<h2 class="font-heading text-subheading text-bone mb-2">Upload Resume</h2>
+<p class="font-body text-body text-slate text-center max-w-md">Drag and drop your PDF or DOCX file here, or click to browse. Clyde will automatically parse and score your document.</p>
+<button class="mt-8 bg-bone text-obsidian rounded-full py-3 px-8 font-label text-label font-bold border border-bone hover:bg-transparent hover:text-bone transition-colors">
+                        Browse Files
+                    </button>
+</div>
+</section>
+<!-- Resumes Grid -->
+<section>
+<div class="flex justify-between items-end mb-8 border-b border-char pb-4">
+<h2 class="font-heading text-heading-sm text-bone">Active Documents</h2>
+<button class="text-slate hover:text-bone transition-colors flex items-center font-label text-label">
+<span class="material-symbols-outlined mr-2 text-sm">filter_list</span>
+                         Filter
+                     </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="bg-obsidian border border-bone rounded-xl overflow-hidden group flex flex-col h-full">
+<div class="bg-paper p-6 h-48 relative border-b border-char">
+<!-- Placeholder for Document Preview -->
+<div class="absolute inset-4 border border-char border-opacity-20 flex flex-col p-4">
+<div class="w-1/2 h-2 bg-char bg-opacity-10 mb-4"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+<div class="w-3/4 h-1 bg-char bg-opacity-10 mb-6"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+</div>
+<div class="absolute top-4 right-4 bg-obsidian text-bone font-label text-xs py-1 px-3 rounded-full border border-bone">
+                                Primary
+                            </div>
+</div>
+<div class="p-6 flex-grow flex flex-col justify-between">
+<div>
+<h3 class="font-heading text-body-lg text-bone mb-1 truncate">Senior Product Designer</h3>
+<p class="font-body text-label text-slate mb-4">Product_Designer_2024_v3.pdf</p>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center border-t border-char pt-3">
+<span class="font-body text-label text-slate">ATS Score</span>
+<span class="font-body text-label text-bone font-bold flex items-center">
+<span class="material-symbols-outlined text-sm mr-1 text-bone">check_circle</span>
+                                        92/100
+                                    </span>
+</div>
+<div class="flex justify-between items-center border-t border-char pt-3">
+<span class="font-body text-label text-slate">Last Optimized</span>
+<span class="font-body text-label text-bone">Oct 12, 2023</span>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 border border-bone rounded-full py-2 font-label text-label text-bone hover:bg-bone hover:text-obsidian transition-colors text-center">
+                                    Edit
+                                </button>
+<button class="w-10 h-10 border border-char rounded-full flex items-center justify-center text-slate hover:text-bone hover:border-bone transition-colors">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-obsidian border border-char rounded-xl overflow-hidden group flex flex-col h-full hover:border-bone transition-colors">
+<div class="bg-paper p-6 h-48 relative border-b border-char opacity-90 grayscale-[20%]">
+<div class="absolute inset-4 border border-char border-opacity-20 flex flex-col p-4">
+<div class="w-1/2 h-2 bg-char bg-opacity-10 mb-4"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+<div class="w-3/4 h-1 bg-char bg-opacity-10 mb-6"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+</div>
+</div>
+<div class="p-6 flex-grow flex flex-col justify-between">
+<div>
+<h3 class="font-heading text-body-lg text-bone mb-1 truncate">UX Researcher</h3>
+<p class="font-body text-label text-slate mb-4">UX_Researcher_Tech.pdf</p>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center border-t border-char pt-3">
+<span class="font-body text-label text-slate">ATS Score</span>
+<span class="font-body text-label text-slate font-bold flex items-center">
+<span class="material-symbols-outlined text-sm mr-1">warning</span>
+                                        78/100
+                                    </span>
+</div>
+<div class="flex justify-between items-center border-t border-char pt-3">
+<span class="font-body text-label text-slate">Last Optimized</span>
+<span class="font-body text-label text-bone">Sep 04, 2023</span>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 border border-char rounded-full py-2 font-label text-label text-slate hover:text-bone hover:border-bone transition-colors text-center">
+                                    Optimize
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-obsidian border border-char rounded-xl overflow-hidden group flex flex-col h-full hover:border-bone transition-colors">
+<div class="bg-paper p-6 h-48 relative border-b border-char opacity-90 grayscale-[20%]">
+<div class="absolute inset-4 border border-char border-opacity-20 flex flex-col p-4">
+<div class="w-1/3 h-2 bg-char bg-opacity-10 mb-4"></div>
+<div class="w-full h-1 bg-char bg-opacity-10 mb-2"></div>
+<div class="w-5/6 h-1 bg-char bg-opacity-10 mb-2"></div>
+</div>
+</div>
+<div class="p-6 flex-grow flex flex-col justify-between">
+<div>
+<h3 class="font-heading text-body-lg text-bone mb-1 truncate">Design Systems Lead</h3>
+<p class="font-body text-label text-slate mb-4">DS_Lead_2023.pdf</p>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center border-t border-char pt-3">
+<span class="font-body text-label text-slate">ATS Score</span>
+<span class="font-body text-label text-bone font-bold flex items-center">
+<span class="material-symbols-outlined text-sm mr-1">check_circle</span>
+                                        88/100
+                                    </span>
+</div>
+<div class="flex justify-between items-center border-t border-char pt-3">
+<span class="font-body text-label text-slate">Last Optimized</span>
+<span class="font-body text-label text-bone">Aug 21, 2023</span>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 border border-char rounded-full py-2 font-label text-label text-slate hover:text-bone hover:border-bone transition-colors text-center">
+                                    Optimize
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Version Management List -->
+<section class="mt-xl">
+<h2 class="font-heading text-subheading text-bone mb-6">Archive &amp; Versions</h2>
+<div class="border-t border-char">
+<div class="flex items-center justify-between py-4 border-b border-char hover:bg-surface-container-low transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-slate">description</span>
+<div>
+<h4 class="font-body text-body text-bone">Product_Designer_2024_v2.pdf</h4>
+<p class="font-body text-label text-slate">Auto-saved by Clyde</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<span class="font-body text-label text-slate hidden md:block">Oct 10, 2023</span>
+<button class="text-slate hover:text-bone transition-colors"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between py-4 border-b border-char hover:bg-surface-container-low transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-slate">description</span>
+<div>
+<h4 class="font-body text-body text-bone">Product_Designer_2024_v1.pdf</h4>
+<p class="font-body text-label text-slate">Original Upload</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<span class="font-body text-label text-slate hidden md:block">Oct 01, 2023</span>
+<button class="text-slate hover:text-bone transition-colors"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+
+
+</body></html>
