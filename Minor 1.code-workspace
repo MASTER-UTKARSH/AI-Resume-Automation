@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "Minor 1",
+			"path": "."
+		},
+		{
+			"name": "skills",
+			"path": "../../.claude/plugins/cache/nateherk/nateherk-design/0.2.0/skills"
+		},
+		{
+			"name": "ui-ux-pro-max",
+			"path": "../../.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max"
+		}
+	],
+	"settings": {}
+}

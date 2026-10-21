@@ -10,6 +10,16 @@ FAISS_DIR = DATA_DIR / "faiss"
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 FAISS_DIR.mkdir(parents=True, exist_ok=True)
 
+# Load environment variables from .env if present
+for env_file in [BASE_DIR.parent / ".env", BASE_DIR / ".env"]:
+    if env_file.exists():
+        with open(env_file, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip())
+
 class Settings(BaseModel):
     APP_NAME: str = "AI-Powered Resume Automation API"
     APP_VERSION: str = "1.0.0"

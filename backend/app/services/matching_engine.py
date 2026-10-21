@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from backend.app.database.models import CandidateProfile, Job, JobMatch
 from backend.app.services.vector_store import vector_store
 
+from backend.app.services.ghost_detector import GhostJobDetector
+
 logger = logging.getLogger("MatchingEngine")
 
 WEIGHT_SEMANTIC = 0.40
@@ -18,8 +20,17 @@ class MatchingEngine:
     2. Direct & Partial Skill Overlap (30%)
     3. Experience Level Alignment (15%)
     4. Location & Work Preference Compatibility (15%)
+    5. Ghost Job / Posting Legitimacy Discount (adapted from Freehire & CareerOps)
     """
-    def compute_match(self, profile: CandidateProfile, job: Job, semantic_sim: float) -> Dict[str, Any]:
+    def compute_match(
+        self,
+        profile: CandidateProfile,
+        job: Job,
+        semantic_sim: float,
+        repost_count_90d: int = 1,
+        days_active: int = 12,
+        applicant_silence_count: int = 0
+    ) -> Dict[str, Any]:
         # 1. Candidate skills set
         candidate_skills = {s.skill_name.lower().strip() for s in profile.skills}
         required_skills = [s.lower().strip() for s in (job.required_skills or [])]
@@ -57,25 +68,39 @@ class MatchingEngine:
         else:
             preference_score = 80.0
 
-        # Composite Weighted Score
-        overall_score = (
+        # 5. Ghost Job & Legitimacy Evaluation (Freehire / CareerOps)
+        ghost_eval = GhostJobDetector.evaluate_job_legitimacy(
+            job={"title": job.title, "company": job.company.name if job.company else ""},
+            repost_count_90d=repost_count_90d,
+            days_active=days_active,
+            is_official_ats=True,
+            applicant_silence_count=applicant_silence_count
+        )
+
+        # Base Composite Weighted Score
+        base_score = (
             (WEIGHT_SEMANTIC * semantic_score) +
             (WEIGHT_SKILLS * skill_score) +
             (WEIGHT_EXPERIENCE * experience_score) +
             (WEIGHT_PREFERENCE * preference_score)
         )
+
+        # Apply Posting Health / Ghost Penalty Multiplier
+        overall_score = base_score * ghost_eval["penalty_multiplier"]
         overall_score = round(min(98.5, max(15.0, overall_score)), 1)
 
         # Human-readable rationale
         match_count = len(matching_skills)
         total_req = len(required_skills)
         reason = (
-            f"Overall Match: {overall_score}%. "
+            f"Overall Match: {overall_score}% [{ghost_eval['verdict']}]. "
             f"Candidate matches {match_count}/{total_req} required technical skills ({', '.join(matching_skills[:4])}). "
             f"High vector embedding similarity ({semantic_score:.1f}%) to {job.company.name if job.company else 'company'} role description. "
         )
         if missing_skills:
-            reason += f"Recommended skill additions: {', '.join(missing_skills[:3])}."
+            reason += f"Recommended skill additions: {', '.join(missing_skills[:3])}. "
+        if ghost_eval["signals"]:
+            reason += f"Legitimacy: {'; '.join(ghost_eval['signals'])}."
 
         return {
             "overall_score": overall_score,
@@ -85,6 +110,9 @@ class MatchingEngine:
             "preference_score": round(preference_score, 1),
             "matching_skills": matching_skills,
             "missing_skills": missing_skills,
+            "ghost_verdict": ghost_eval["verdict"],
+            "posting_health_penalty": ghost_eval["penalty_points"],
+            "legitimacy_signals": ghost_eval["signals"],
             "reason": reason
         }
 

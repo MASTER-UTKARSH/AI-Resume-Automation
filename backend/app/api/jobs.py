@@ -92,3 +92,34 @@ async def match_jobs(request: MatchRequest, db: Session = Depends(get_db)):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Job matching error: {str(e)}")
+
+@router.post("/verify-url")
+def verify_job_url(url: str = Query(...)):
+    """Verifies job link source host against official ATS apex domains (ai-job-search / freehire)."""
+    from backend.app.core.posting_guard import PostingGuard
+    return PostingGuard.verify_source_host(url)
+
+@router.post("/scrape")
+async def scrape_live_job(url: str = Query(...), db: Session = Depends(get_db)):
+    """
+    Fetches a live job posting from Greenhouse/Lever/Ashby or company career site,
+    cleanses adversarial payloads with PostingGuard, extracts requirements,
+    and indexes into the FAISS vector database.
+    """
+    from backend.app.services.job_scraper import job_scraper
+    try:
+        parsed_job = await job_scraper.fetch_and_clean_posting(url)
+        saved_job = job_scraper.save_and_index_scraped_job(db, parsed_job)
+        return {
+            "status": "success",
+            "message": "Live job fetched, sanitized, and indexed successfully.",
+            "job_id": saved_job.job_id,
+            "title": saved_job.title,
+            "company": saved_job.company.name if saved_job.company else "",
+            "required_skills": saved_job.required_skills,
+            "security_verdict": parsed_job["security_verdict"],
+            "security_findings": parsed_job["security_findings"],
+            "host_verification": parsed_job["host_verification"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Live job scraping failed: {str(e)}")
