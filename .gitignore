@@ -39,3 +39,6 @@ env/
 reference_repos/
 .env
 .env.*
+
+# Compiled binaries
+backend/bin/tectonic

@@ -1,13 +1,16 @@
+import re
+import json
 import shutil
 from pathlib import Path
-from typing import Optional
-from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
+from typing import Optional, List, Dict, Any
+from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException, Response
 from sqlalchemy.orm import Session
 from backend.app.core.config import settings
 from backend.app.core.event_bus import event_bus
 from backend.app.database.session import get_db
 from backend.app.database.models import User, Resume, ResumeVersion, CandidateProfile
 from backend.app.services.resume_parser import resume_parser
+from backend.app.services.latex_exporter import latex_exporter
 
 from backend.app.core.posting_guard import PostingGuard
 from backend.app.core.model_router import model_router
@@ -173,3 +176,122 @@ def get_resume_profile(resume_id: str, db: Session = Depends(get_db)):
             "description": p.description
         } for p in profile.projects]
     }
+
+
+def _extract_profile_dict(profile: CandidateProfile) -> Dict[str, Any]:
+    """Helper to convert CandidateProfile ORM into normalized dict for LaTeX export."""
+    return {
+        "full_name": profile.full_name,
+        "name": profile.full_name,
+        "email": profile.email,
+        "phone": profile.phone,
+        "headline": profile.headline,
+        "location": "Guna, MP, India",
+        "skills": [{"name": s.skill_name, "category": s.category} for s in profile.skills],
+        "education": [{
+            "institution": e.institution,
+            "degree": e.degree,
+            "field": e.field_of_study,
+            "year": e.graduation_year,
+            "gpa": e.gpa
+        } for e in profile.education],
+        "experience": [{
+            "company": exp.company,
+            "role": exp.role,
+            "dates": f"{exp.start_date or ''} - {exp.end_date or 'Present'}",
+            "description": exp.description
+        } for exp in profile.experience],
+        "projects": [{
+            "title": p.title,
+            "technologies": p.technologies,
+            "description": p.description
+        } for p in profile.projects]
+    }
+
+
+@router.get("/{resume_id}/latex")
+def download_resume_latex(resume_id: str, db: Session = Depends(get_db)):
+    """
+    Generates and downloads the Overleaf-compatible LaTeX source (.tex)
+    based on the sb2nov / Jake's Resume format.
+    """
+    profile = db.query(CandidateProfile).filter_by(resume_id=resume_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Resume profile not found")
+
+    profile_dict = _extract_profile_dict(profile)
+    tex_source = latex_exporter.generate_latex_source(profile_dict)
+
+    safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', profile.full_name or "Resume")
+    filename = f"{safe_name}_Tailored_Resume.tex"
+
+    return Response(
+        content=tex_source,
+        media_type="text/x-tex",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
+
+
+@router.post("/{resume_id}/export-latex")
+def export_tailored_latex(
+    resume_id: str,
+    tailored_bullets_json: Optional[str] = Form(None),
+    job_title: Optional[str] = Form(None),
+    company: Optional[str] = Form(None),
+    db: Session = Depends(get_db)
+):
+    """
+    Accepts tailored bullets, executes FactVerifier provenance audit,
+    and returns compile-ready Overleaf LaTeX code + grounding report.
+    """
+    profile = db.query(CandidateProfile).filter_by(resume_id=resume_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Candidate profile not found")
+
+    profile_dict = _extract_profile_dict(profile)
+
+    tailored_bullets = None
+    if tailored_bullets_json:
+        try:
+            tailored_bullets = json.loads(tailored_bullets_json)
+        except Exception:
+            tailored_bullets = [b.strip() for b in tailored_bullets_json.split("\n") if b.strip()]
+
+    result = latex_exporter.audit_and_export_latex(
+        profile_data=profile_dict,
+        tailored_bullets=tailored_bullets,
+        job_title=job_title,
+        company=company
+    )
+
+    return result
+
+
+@router.get("/{resume_id}/pdf")
+def download_compiled_resume_pdf(resume_id: str, db: Session = Depends(get_db)):
+    """
+    Compiles the tailored Jake's Resume via local Tectonic engine
+    and streams the ATS-compliant PDF directly to the client.
+    """
+    profile = db.query(CandidateProfile).filter_by(resume_id=resume_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Resume profile not found")
+
+    profile_dict = _extract_profile_dict(profile)
+    tex_source = latex_exporter.generate_latex_source(profile_dict)
+
+    compile_result = latex_exporter.compile_pdf(tex_source)
+    if not compile_result.get("success"):
+        raise HTTPException(
+            status_code=503,
+            detail=f"LaTeX compilation failed: {compile_result.get('error')}. You can download the .tex file directly via /api/resumes/{resume_id}/latex to compile on Overleaf."
+        )
+
+    safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', profile.full_name or "Resume")
+    filename = f"{safe_name}_Tailored_Resume.pdf"
+
+    return Response(
+        content=compile_result["pdf_bytes"],
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )

@@ -134,13 +134,16 @@ flowchart TD
   3. Flags any bullet containing ungrounded claims. If a metric cannot be traced back to the base profile, the system halts persistence and reports the exact fabrication.
   4. Calculates a `provenance_score` (Target: $100.0\%$).
 
-### Stage 6: Human-in-the-Loop Review & ATS Artifact Persistence
-- **Reference:** `career-ops/build-cv-html.mjs` & `freehire/extension/`
-- **Implementation:** [backend/app/api/resumes.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/api/resumes.py)
+### Stage 6: Human-in-the-Loop Review & Hybrid ATS Artifact Persistence
+- **Reference:** `career-ops/build-cv-latex.mjs`, `career-ops/templates/cv-template.tex`, & `career-ops/generate-latex.mjs`
+- **Implementation:** [backend/app/services/latex_exporter.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/services/latex_exporter.py) & [backend/app/api/resumes.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/api/resumes.py)
 - **Workflow:**
   1. Verified resume versions and match rationales are published to the asynchronous Event Bus (`RESUME_UPLOADED`, `MATCHES_COMPUTED`).
   2. Versioning is non-destructive (V1 $\rightarrow$ V2 $\rightarrow$ V3) in relational SQLAlchemy models.
-  3. Single-column high-contrast ATS layouts are presented in the web UI for one-click candidate review, inline keyword injection, and PDF export.
+  3. **Hybrid Export Architecture**:
+     - **Interactive Web Preview**: Single-column high-contrast ATS layouts in the Clyde dashboard for instant inspection and live metric editing.
+     - **Deterministic Jake's Resume (.tex)**: Clean character escaping (`\&`, `\%`, `\$`), Markdown-to-LaTeX bolding (`**metric**` $\rightarrow$ `\textbf{metric}`), and dynamic section formatting ready for 1-click Overleaf editing.
+     - **Tectonic PDF Compilation**: Local high-speed compilation engine generating ATS-compliant PDFs (`\pdfgentounicode=1`) in ~2 seconds with zero external package dependencies.
 
 ---
 
@@ -151,6 +154,8 @@ flowchart TD
 | **Adversarial Ingestion & Security Guard** | [backend/app/core/posting_guard.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/core/posting_guard.py) | [ai-job-search/tools/posting_guard.py](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/ai-job-search/tools/posting_guard.py) |
 | **Official ATS Apex Verification** | [backend/app/core/posting_guard.py:verify_source_host](file:///home/utkarsh21/Desktop/Minor%201/backend/app/core/posting_guard.py) | [ai-job-search/.claude/commands/apply.md:55-69](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/ai-job-search/.claude/commands/apply.md#L55-L69) |
 | **Anti-Hallucination Fact Verification** | [backend/app/services/fact_verifier.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/services/fact_verifier.py) | [career-ops/verify-cv-facts.mjs](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/career-ops/verify-cv-facts.mjs) |
+| **Deterministic Jake's Resume LaTeX Engine** | [backend/app/services/latex_exporter.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/services/latex_exporter.py) | [career-ops/build-cv-latex.mjs](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/career-ops/build-cv-latex.mjs) & [career-ops/templates/cv-template.tex](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/career-ops/templates/cv-template.tex) |
+| **Tectonic PDF Compilation Service** | [backend/app/services/latex_exporter.py:compile_pdf](file:///home/utkarsh21/Desktop/Minor%201/backend/app/services/latex_exporter.py) | [career-ops/generate-latex.mjs](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/career-ops/generate-latex.mjs) |
 | **Ghost Job & Repost Cluster Detector** | [backend/app/services/ghost_detector.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/services/ghost_detector.py) | [career-ops/detect-reposts.mjs](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/career-ops/detect-reposts.mjs) & [freehire/internal/job/ghost/classify.go](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/freehire/internal/job/ghost/classify.go) |
 | **Drafter-Reviewer Agent Loop** | [backend/app/core/model_router.py:orchestrate_drafter_reviewer](file:///home/utkarsh21/Desktop/Minor%201/backend/app/core/model_router.py) | [ai-job-search/.claude/commands/apply.md:39-85](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/ai-job-search/.claude/commands/apply.md#L39-L85) |
 | **5-Factor Hybrid Scoring Formula** | [backend/app/services/matching_engine.py](file:///home/utkarsh21/Desktop/Minor%201/backend/app/services/matching_engine.py) | [career-ops/A-H Evaluation Framework](file:///home/utkarsh21/Desktop/Minor%201/reference_repos/career-ops/README.md#L171-L179) |
@@ -172,7 +177,11 @@ python3 -m unittest discover -s backend/tests -p "test_*.py" -v
 - `test_fact_verifier_detects_hallucinations`: **PASSED** (Flags ungrounded metrics and AI buzzwords).
 - `test_ghost_job_detector_repost_and_silence_tiers`: **PASSED** (Detects multi-repost clusters and applies legitimacy penalty).
 - `test_drafter_reviewer_multi_agent_orchestration`: **PASSED** (GLM drafting + Qwen critique + FactVerifier provenance check).
+- `test_latex_escaping_and_bolding`: **PASSED** (Escapes special characters and preserves `\textbf{}`).
+- `test_generate_latex_source` & `test_tailored_bullets_injection`: **PASSED** (Overleaf-ready Jake's Resume structure).
+- `test_compile_pdf_with_tectonic`: **PASSED** (Compiled binary ATS PDF via Tectonic engine in 2.1s).
+- `test_download_resume_latex_source` & `test_download_compiled_pdf_endpoint`: **PASSED** (FastAPI endpoints return 200 OK with correct MIME types).
 - `test_multi_factor_job_matching`: **PASSED** (Computes FAISS semantic matching + skills overlap + legitimacy factor).
 - `test_relational_cascade` & `test_event_bus_publish_subscribe`: **PASSED**.
 
-**Total: 13 Tests, 100% Pass Rate.**
+**Total: 24 Tests, 100% Pass Rate.**

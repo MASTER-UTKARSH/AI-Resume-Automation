@@ -47,19 +47,27 @@ class FactVerifier:
         # Experience & Projects
         for exp in profile.get("experience", []):
             desc = exp.get("description", "")
-            role = exp.get("title", "")
+            role = exp.get("title") or exp.get("role", "")
             comp = exp.get("company", "")
             source_text_parts.extend([desc, role, comp])
+            if "bullets" in exp and isinstance(exp["bullets"], list):
+                source_text_parts.extend(exp["bullets"])
 
         for proj in profile.get("projects", []):
             desc = proj.get("description", "")
             p_name = proj.get("title", "")
             tools = proj.get("technologies", [])
             source_text_parts.extend([desc, p_name])
+            if "bullets" in proj and isinstance(proj["bullets"], list):
+                source_text_parts.extend(proj["bullets"])
             if isinstance(tools, list):
                 for t in tools:
                     source_tools.add(str(t).lower())
                     source_text_parts.append(str(t))
+            elif isinstance(tools, str):
+                for t in tools.split(","):
+                    source_tools.add(t.strip().lower())
+                    source_text_parts.append(t.strip())
 
         combined_source_text = " ".join(source_text_parts)
         
