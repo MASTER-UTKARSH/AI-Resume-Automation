@@ -1,0 +1,59 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.5.0
+ignore:
+  SNYK-JS-CODEMIRROR-10494092:
+    - '*':
+        reason: >-
+          ReDoS in codemirror@5.65.21, pulled in transitively by our direct
+          dependency easymde@2.21.0. easymde's only consumer is
+          NoteEditor.svelte, a private per-user job-tracking notes field —
+          content is always self-authored by the same user who reads it back,
+          never rendered from another user's or otherwise untrusted input, so
+          the exploitable path does not exist here.
+          No safe fix is available: easymde 2.21.0 is the latest stable
+          release and still pins codemirror ^5.65.15; the only CodeMirror-6
+          line is a pre-release (3.0.0-alpha/beta) with a fully incompatible
+          API, and forcing a codemirror override under 2.21.0 breaks it at
+          runtime (CM5-only calls). Revisit when easymde ships a stable CM6
+          release, or budget a NoteEditor migration off easymde before this
+          expires.
+        expires: 2026-11-13T00:00:00.000Z
+        created: 2026-08-13T00:00:00.000Z
+  SNYK-JS-DEEPMERGE-19964053:
+    - '*':
+        reason: >-
+          Prototype Pollution in deepmerge@4.3.1, pulled in transitively by
+          @sveltejs/vite-plugin-svelte, which @sveltejs/kit declares as a PEER
+          dependency and not a dependency — it is a Vite plugin, so it runs at
+          BUILD time only and is in neither the SSR server bundle nor anything
+          the browser loads. Its one call site is mergeConfigs() in
+          utils/options.js, which merges the plugin's own option objects: our
+          svelte.config.js and our vite config, both statically authored in
+          this repository. Polluting a prototype needs attacker-controlled keys
+          in the merged object, and nothing a request carries ever reaches it,
+          so the exploitable path does not exist here.
+          No fix is available: deepmerge 4.3.1 IS the latest published release
+          (there is no 4.3.2 and no 5.x), and @sveltejs/vite-plugin-svelte
+          7.3.0 — also the latest — still declares deepmerge ^4.3.1, so neither
+          upgrading nor a pnpm override reaches a patched version. Revisit when
+          deepmerge publishes a fixed release, or when vite-plugin-svelte drops
+          the dependency; either ends this ignore without a code change here.
+        expires: 2026-12-20T00:00:00.000Z
+        created: 2026-09-20T00:00:00.000Z
+  SNYK-JS-PICOMATCH-21248802:
+    - '*':
+        reason: >-
+          ReDoS in picomatch@4.0.5 (analyzeRepeatedExtglob), reached by an
+          attacker-supplied glob pattern. Every path to it is BUILD or
+          tooling time: vite/tinyglobby, the adapter-node and workbox rollup
+          plugins, svelte-check and typescript-eslint. None of it is in the
+          SSR server bundle or anything the browser loads, and the patterns it
+          matches are statically authored in this repository (our vite and
+          svelte config, the import.meta.glob in blogPosts.ts) — nothing a
+          request carries ever becomes a glob, so the exploitable path does
+          not exist here.
+          No fix is available: Snyk lists no fixed version, and 4.0.7, the
+          latest release, predates the advisory. Revisit when picomatch ships
+          a fixed release; a lockfile refresh then ends this ignore.
+        expires: 2026-11-20T00:00:00.000Z
+        created: 2026-10-20T00:00:00.000Z

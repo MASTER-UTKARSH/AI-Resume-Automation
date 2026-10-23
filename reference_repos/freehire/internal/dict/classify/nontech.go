@@ -1,0 +1,261 @@
+package classify
+
+import (
+	"strings"
+
+	"github.com/strelov1/freehire/internal/dict/roletype"
+	"github.com/strelov1/freehire/internal/dict/wordmatch"
+)
+
+// nonTechTitleTerms is a curated set of confidently non-technical role nouns
+// found in job titles, beyond the business functions the categoryTable already
+// resolves (marketing/sales/support). It exists to place the
+// large tail of non-engineering roles that generic ATS boards pour into the
+// catalogue — healthcare, trades, hospitality, retail, logistics, education,
+// personal care, facilities — which the tech-focused categoryTable leaves empty.
+//
+// The same doctrine as the rest of classify: whole-word match, never guess. Two
+// rules keep it from ever shadowing a technical role:
+//   - No term that also occurs in tech titles. Bare "engineer"/"technician"/
+//     "analyst"/"driver" (device driver)/"server" (backend)/"warehouse" (data
+//     warehouse) are deliberately absent; ambiguous roles use a full non-tech
+//     phrase ("truck driver", "line cook") instead.
+//   - This detector is consulted only after the tech category dictionary is
+//     silent (see jobderive), so tech evidence always wins.
+var nonTechTitleTerms = []string{
+	// Healthcare & care. "…technician" collides with IT/field-service technician, so
+	// only anchored forms ("pharmacy technician", "surgical technician") are listed.
+	// The behavior-technician cluster is the largest single unclassified group in the
+	// catalogue (~26k), all ABA therapy; "rbt" is its universal abbreviation and is not
+	// a word in any technical title.
+	"behavior technician", "registered behavior technician", "rbt",
+	"behavioral health", "speech language pathologist", "language pathologist",
+	"therapy assistant", "care aide", "care assistant", "social worker",
+	"nurse", "nursing", "registered nurse", "nurse practitioner",
+	"certified nursing assistant", "cna", "lpn", "licensed practical nurse",
+	"caregiver", "caretaker", "home health aide", "home health", "hospice",
+	"veterinary", "veterinarian", "dentist", "dental hygienist", "dental assistant",
+	"pharmacist", "pharmacy technician", "phlebotomist", "phlebotomy", "paramedic",
+	"medical assistant", "certified medical assistant", "medical scribe",
+	"medical technologist", "patient care", "patient access",
+	"surgical technologist", "surgical technician", "scrub tech",
+	"physical therapist", "occupational therapist", "respiratory therapist",
+	"speech therapist", "massage therapist", "radiologic technologist", "sonographer",
+	// Skilled trades. "…engineer"/"…technician" excluded; "hvac technician" anchored.
+	"electrician", "plumber", "welder", "carpenter", "machinist", "millwright",
+	"forklift", "ironworker", "iron worker", "laborer", "general labor",
+	"pipefitter", "stone mason", "brick mason", "bricklayer", "roofer", "hvac",
+	"hvac technician", "mechanic", "boilermaker", "sheet metal",
+	// Hospitality & food service. Bare "chef" is deliberately absent — it collides
+	// with Progress Chef (config-management), which would mislabel a DevOps/SRE
+	// title the tech dictionary did not place; the cook terms cover food service.
+	"cook", "line cook", "prep cook", "fry cook", "grill cook", "food service",
+	"barista", "bartender", "dishwasher", "housekeeper", "housekeeping", "banquet",
+	"waiter", "waitress", "busser", "concierge", "valet",
+	// Retail & warehouse. Bare "warehouse" excluded (data-warehouse engineer); only
+	// anchored role forms.
+	"cashier", "stocker", "merchandiser", "retail associate", "retail sales",
+	"sales associate", "sales clerk", "store associate", "store clerk",
+	"warehouse associate", "warehouse worker", "order picker", "picker", "packer",
+	"material handler", "package handler", "cdl driver", "machine operator",
+	"crew member", "car rental",
+	// Personal care & fitness
+	"pilates instructor", "yoga instructor", "fitness instructor",
+	"personal trainer", "cosmetologist", "hair stylist", "hairstylist",
+	"barber", "esthetician", "manicurist", "nail technician",
+	// Education & childcare
+	"teacher", "substitute teacher", "teaching assistant", "tutor", "preschool",
+	"childcare", "child care", "daycare", "camp counselor", "paraprofessional",
+	// Office & finance administration. Anchored forms only ("data entry clerk", not
+	// bare "data"; "loan officer", not bare "officer").
+	"paralegal", "bookkeeper", "accountant", "accounting clerk", "payroll clerk",
+	"payroll specialist", "accounts payable", "accounts receivable", "teller",
+	"bank teller", "loan officer", "underwriter", "claims adjuster",
+	"administrative assistant", "office assistant", "data entry clerk", "file clerk",
+	// Facilities & cleaning
+	"janitor", "janitorial", "cleaner", "custodian", "custodial", "groundskeeper",
+	"maintenance worker", "maintenance technician", "parking attendant", "flight attendant",
+	// Security & transport
+	"security guard", "truck driver", "delivery driver", "bus driver", "courier",
+	// Front-of-house administration
+	"receptionist", "front desk",
+	// Russian non-technical roles (the trudvsem/hh tail arrives in Russian, so the
+	// English terms above never fire and these jobs fall to unknown instead of
+	// non-tech). Same doctrine: unambiguous role nouns only, whole-word (Cyrillic
+	// boundaries handled by wordmatch.UnicodeBoundary). Deliberately ABSENT — the
+	// Russian ambiguous words that mirror the English exclusions: bare "инженер"
+	// (engineer), "техник" (IT/field technician), "оператор" (operator), bare
+	// "администратор"/"директор"/"менеджер"/"аналитик"/"специалист"/"мастер".
+	// "бухгалтер" is absent too — it already resolves to the finance category.
+	// Healthcare & care
+	"медсестра", "медицинская сестра", "медбрат", "фельдшер", "санитар", "санитарка",
+	"сиделка", "няня",
+	// Skilled trades
+	"сварщик", "электрогазосварщик", "слесарь", "сантехник", "электромонтер",
+	"электромонтёр", "электрик", "токарь", "фрезеровщик", "маляр", "штукатур",
+	"каменщик", "бетонщик", "арматурщик", "стропальщик", "монтажник", "машинист",
+	"тракторист",
+	// Food service
+	"повар", "пекарь", "кондитер", "официант", "официантка", "бармен",
+	"посудомойщик", "кухонный рабочий",
+	// Retail & warehouse
+	"продавец", "кассир", "продавец-кассир", "продавец-консультант", "кладовщик",
+	"комплектовщик", "грузчик", "упаковщик", "фасовщик", "приёмщик", "товаровед",
+	"мерчендайзер", "администратор магазина", "директор магазина",
+	// Cleaning, facilities & security
+	"уборщик", "уборщица", "дворник", "разнорабочий", "подсобный рабочий", "вахтер",
+	"вахтёр", "сторож", "охранник", "консьерж",
+	// Education & personal care
+	"воспитатель", "учитель", "логопед", "парикмахер", "маникюрша", "косметолог",
+	// Transport
+	"водитель", "курьер", "экспедитор",
+	// Portuguese (BR) non-technical roles (the gupy/BR tail). Same doctrine; bare
+	// ambiguous words absent: "técnico" (technician), "operador" (operator),
+	// "analista"/"assistente"/"vendedor"/"professor"/"segurança" (infosec collision).
+	// Retail & warehouse
+	"operador de caixa", "operador de loja", "repositor", "estoquista", "frentista",
+	"atendente de loja",
+	// Cleaning & facilities
+	"auxiliar de limpeza", "faxineiro", "zelador", "porteiro",
+	// Food service
+	"cozinheiro", "auxiliar de cozinha", "padeiro", "açougueiro", "garçom", "copeiro",
+	// Trades
+	"pedreiro", "pintor", "soldador", "eletricista", "encanador", "mecânico",
+	"servente", "ajudante geral", "jardineiro",
+	// Care, transport & front-of-house
+	"cuidador", "enfermeiro", "técnico de enfermagem", "auxiliar de enfermagem",
+	"babá", "motorista", "motoboy", "entregador", "vigilante", "camareira",
+	"recepcionista",
+
+	// ---- Second mining wave (cmd/mine-titles over the residual mass, 2026-07-28) ----
+	//
+	// The report ranks clusters by volume, and volume alone would have wrecked the
+	// catalogue: its largest groups were "team member", "systems engineer" (80
+	// sources), "team lead" (93), "tech lead" (78), "technical lead" (65),
+	// "software engineering" (55), "product management", "data center", and the bare
+	// seniorities "vice president"/"senior director"/"senior associate". Those name
+	// the roles this board exists to carry and are deliberately absent. So are the
+	// borderline "quality/process/project/service engineer" and "service technician",
+	// which are mostly industrial but collide with QA and IT field-service titles;
+	// they need their own decision, not a bulk import.
+	//
+	// Absent for a different reason: "banco de talentos" (29 sources), "general
+	// application" (34), "ausbildung zum" (18), "jovem aprendiz", "sökes till". These
+	// are not non-technical roles but ABSENT ones — speculative-application
+	// placeholders — and a technical company's talent pool matches them exactly.
+	// "são paulo" (23 sources) is a city, and "and older" is the tail of an age
+	// requirement; neither is a role at all.
+	//
+	// Non-software engineering. Anchored to a physical discipline, so a software role
+	// in the same domain ("Manufacturing Execution Systems Engineer") does not contain
+	// the phrase. "maintenance engineer" is deliberately NOT here: "Software
+	// Maintenance Engineer" already stands as a negative in this file's tests.
+	"electrical engineer", "mechanical engineer", "civil engineer",
+	"structural engineer", "manufacturing engineer", "quantity surveyor",
+	// Healthcare, continued. "mental health", "clinical research", "primary care" and
+	// "advanced practice" are domain words health-tech companies put in their own
+	// engineering titles, so only the anchored role forms are listed.
+	"mental health technician", "mental health counselor", "mental health therapist",
+	"mental health associate", "clinical research coordinator",
+	"clinical research associate", "primary care physician", "primary care provider",
+	"advanced practice provider", "advanced practice nurse",
+	"physician assistant", "family medicine", "medical director", "care coordinator",
+	"dietary aide", "radiology technologist", "mri technologist",
+	// Hospitality & food service, continued. Bare "chef" stays absent (Progress Chef,
+	// the config-management tool); the anchored brigade titles do not collide.
+	"sous chef", "chef de partie", "restaurant team", "room attendant", "guest service",
+	// Automotive service
+	"automotive technician", "automotive service", "service advisor", "auto body",
+	"oil change", "lube technician",
+	// Production & heavy equipment. Bare "production" names an SRE-adjacent role
+	// ("Production Engineer"), so only the anchored non-engineering forms are listed.
+	"production operator", "production associate", "production supervisor",
+	"maintenance supervisor", "equipment operator", "heavy equipment",
+	// Banking, insurance & the retail floor. "wealth management" and "client advisor"
+	// are absent: both are ordinary fintech engineering-title words.
+	"personal banker", "relationship banker", "associate banker", "financial advisor",
+	"insurance agent", "merchandise associate", "retail keyholder", "beauty advisor",
+	"store mgr", "store manager",
+	// Education, laboratory & facilities
+	"adjunct faculty", "assistant professor", "lab technician",
+	"environmental services", "community liaison",
+	// The Spanish/Portuguese and Russian tails of the same wave
+	"auxiliar administrativo", "охране труда", "охрана труда",
+}
+
+// ConfirmedNonTech reports whether a title states a non-technical role AND nothing
+// places it in the catalogue. It exists because IsNonTech alone is not a safe basis for
+// turning a posting away: the dictionary matches its terms anywhere in a title, and it
+// was written on the contract stated above — consulted only after the tech check. The
+// ingest filter, which refuses on this signal, goes through here so the precedence
+// cannot be forgotten.
+//
+// Any resolved category vetoes the refusal, technical or not. The catalogue is broader
+// than IT: a posting the title dictionary files under a facet — `healthcare`, `retail`,
+// `industrial_engineering`, any of them — belongs in it and is searchable under that
+// facet; only `is_tech=false` follows from the placement. So a "Registered Nurse" is
+// kept (healthcare), while a title that names a non-technical role the dictionary
+// cannot FILE is still refused, because a posting no facet reaches is one search
+// excludes anyway (search.CategoryUnresolved). Growing the catalogue is therefore a
+// dictionary change: give the role a category and the next crawl admits it.
+//
+// The role_type facet is the other placement, and it vetoes for the same reason: a
+// "General Manager" names no craft, but roletype marks it a people manager, search
+// keeps it on that facet, and refusing it here would turn away a posting search would
+// have shown. The two gates must agree — a posting is kept iff some facet reaches it.
+func ConfirmedNonTech(title string, hasTechEvidence bool) bool {
+	if hasTechEvidence || Parse(title).Category != "" || roletype.Derive(title) != "" || NamesManager(title) {
+		return false
+	}
+	return IsNonTech(title)
+}
+
+// managerWords are the bare "manager" nouns NamesManager looks for, in the languages the
+// catalogue carries them.
+var managerWords = []string{"manager", "managerin", "менеджер"}
+
+// NamesManager reports whether a title names a manager of SOME kind, whatever it manages.
+// It is deliberately not a category and not the people_manager marker: 40% of bare
+// "manager" titles manage a thing, not people, and the rest name no craft — "Case
+// Manager", "Property Manager", "Service Manager", a bare "Менеджер". Retiring the
+// `management` category left ~2.9% of the open catalogue with no facet at all, and the
+// owner chose to keep those postings reachable by keyword search rather than lose them,
+// so both catalogue gates (here and search.CategoryUnresolved) admit a title this names.
+func NamesManager(title string) bool {
+	lower := strings.ToLower(title)
+	for _, w := range managerWords {
+		if wordmatch.Contains(lower, w, wordmatch.UnicodeBoundary) {
+			return true
+		}
+	}
+	return false
+}
+
+// NonTechTerms returns the curated non-tech title terms. Exposed so the catalogue
+// miner can check its stop-word list against them: a stop word that is also a token
+// of a known non-tech role would drop every word pair built from that phrase, hiding
+// the whole role family from mining rather than merely filtering it. Returns a copy;
+// the dictionary stays immutable.
+func NonTechTerms() []string {
+	return append([]string(nil), nonTechTitleTerms...)
+}
+
+// ptGenderSuffix strips the Brazilian-Portuguese inclusive gender parentheticals
+// ("operador(a)", "enfermeiro(a)") so a phrase term matches the common written form.
+// Without it "operador(a) de caixa" would not match "operador de caixa".
+var ptGenderSuffix = strings.NewReplacer("(a)", "", "(o)", "", "(as)", "", "(os)", "", "(a/o)", "")
+
+// IsNonTech reports whether a job title states a confidently non-technical role,
+// matching any nonTechTitleTerms term on word boundaries. It never guesses: a
+// title it cannot confidently place returns false. It resolves ONLY non-technical
+// roles — a technical title yields false — so it can feed the is_tech derivation
+// without risking a technical job being mislabelled.
+func IsNonTech(title string) bool {
+	lower := ptGenderSuffix.Replace(strings.ToLower(title))
+	for _, term := range nonTechTitleTerms {
+		if wordmatch.Contains(lower, term, wordmatch.UnicodeBoundary) {
+			return true
+		}
+	}
+	return false
+}

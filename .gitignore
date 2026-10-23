@@ -36,7 +36,6 @@ env/
 
 # Temporary logs
 *.log
-reference_repos/
 .env
 .env.*
 

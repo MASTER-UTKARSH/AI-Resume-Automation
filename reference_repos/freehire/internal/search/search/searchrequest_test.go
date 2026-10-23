@@ -1,0 +1,116 @@
+package search
+
+import "testing"
+
+func TestSearchRequestWithoutAVectorAsksForNoHybridRanking(t *testing.T) {
+	req := buildSearchRequest(SearchParams{Query: "golang", Sort: []string{"posted_at:desc"}, Limit: 20})
+	if req.Vector != nil {
+		t.Errorf("Vector = %v, want nil", req.Vector)
+	}
+	if req.Hybrid != nil {
+		t.Errorf("Hybrid = %+v, want nil — a hybrid directive without a vector changes plain keyword ranking", req.Hybrid)
+	}
+	if req.Limit != 20 {
+		t.Errorf("Limit = %d, want 20", req.Limit)
+	}
+}
+
+// A Vector without an embedder name is a 400 from the engine, so the two must always
+// travel together.
+func TestSearchRequestWithAVectorAsksForPureSemanticRanking(t *testing.T) {
+	v := make([]float32, 8)
+	v[0] = 1
+	req := buildSearchRequest(SearchParams{Vector: v, Limit: 20})
+
+	if len(req.Vector) != len(v) {
+		t.Fatalf("Vector has %d values, want %d", len(req.Vector), len(v))
+	}
+	if req.Hybrid == nil {
+		t.Fatal("Hybrid is nil; a vector without an embedder name is a 400 from the engine")
+	}
+	if req.Hybrid.Embedder != SkillEmbedder {
+		t.Errorf("Hybrid.Embedder = %q, want %q", req.Hybrid.Embedder, SkillEmbedder)
+	}
+	if req.Hybrid.SemanticRatio != 1 {
+		t.Errorf("Hybrid.SemanticRatio = %v, want 1 — anything less blends in a keyword score that is noise for an empty query",
+			req.Hybrid.SemanticRatio)
+	}
+}
+
+func TestSearchRequestCarriesTheFilterAlongsideTheVector(t *testing.T) {
+	v := make([]float32, 8)
+	v[0] = 1
+	req := buildSearchRequest(SearchParams{Vector: v, Filter: `country = "DE"`, Limit: 20})
+
+	if req.Filter == nil {
+		t.Error("Filter was dropped when a vector was present; the two must compose in one query")
+	}
+	if len(req.Vector) == 0 {
+		t.Error("Vector was dropped when a filter was present")
+	}
+}
+
+func TestSearchRequestPassesPaginationThrough(t *testing.T) {
+	req := buildSearchRequest(SearchParams{Limit: 25, Offset: 400})
+	if req.Limit != 25 || req.Offset != 400 {
+		t.Errorf("limit/offset = %d/%d, want 25/400", req.Limit, req.Offset)
+	}
+}
+
+func TestSearchRequestWithoutQFieldsLeavesAttributesToSearchOnUnset(t *testing.T) {
+	req := buildSearchRequest(SearchParams{Query: "golang", Limit: 20})
+	if req.AttributesToSearchOn != nil {
+		t.Errorf("AttributesToSearchOn = %v, want nil — Meilisearch's default (all searchable attributes) must apply", req.AttributesToSearchOn)
+	}
+}
+
+func TestSearchRequestWithQFieldsSetsAttributesToSearchOn(t *testing.T) {
+	req := buildSearchRequest(SearchParams{Query: "systems", QFields: []string{"title"}, Limit: 20})
+	if len(req.AttributesToSearchOn) != 1 || req.AttributesToSearchOn[0] != "title" {
+		t.Errorf("AttributesToSearchOn = %v, want [title]", req.AttributesToSearchOn)
+	}
+}
+
+// An agent's semantic search is a HYBRID of its text and its embedding, against the
+// description embedder — never the skill one, whose vectors live in another space.
+func TestBuildSearchRequestSemanticVectorIsAHybridOverDescriptions(t *testing.T) {
+	v := []float32{0.1, 0.2}
+	req := buildSearchRequest(SearchParams{Query: "payments backend", SemanticVector: v, Filter: `country = "DE"`, ScoreThreshold: 0.7, Limit: 10})
+
+	if req.Hybrid == nil {
+		t.Fatal("no hybrid block: the semantic vector would be ignored")
+	}
+	if req.Hybrid.Embedder != DescEmbedder {
+		t.Errorf("hybrid embedder = %q, want %q", req.Hybrid.Embedder, DescEmbedder)
+	}
+	if req.Hybrid.SemanticRatio <= 0 || req.Hybrid.SemanticRatio >= 1 {
+		t.Errorf("semantic ratio = %v, want a blend strictly between keyword-only and vector-only", req.Hybrid.SemanticRatio)
+	}
+	if len(req.Vector) != 2 {
+		t.Errorf("vector = %v, want the query embedding", req.Vector)
+	}
+	if req.Filter != `country = "DE"` {
+		t.Errorf("filter = %v, want the caller's filter unchanged", req.Filter)
+	}
+	if req.RankingScoreThreshold != 0.7 {
+		t.Errorf("ranking score threshold = %v, want 0.7", req.RankingScoreThreshold)
+	}
+}
+
+// The match sort keeps its own embedder and its pure-vector ratio even if a semantic
+// vector rode along.
+func TestBuildSearchRequestMatchSortWinsOverSemanticVector(t *testing.T) {
+	req := buildSearchRequest(SearchParams{Vector: []float32{1}, SemanticVector: []float32{2}})
+	if req.Hybrid == nil || req.Hybrid.Embedder != SkillEmbedder || req.Hybrid.SemanticRatio != 1 {
+		t.Errorf("hybrid = %+v, want the skills embedder at ratio 1", req.Hybrid)
+	}
+}
+
+// No vector of either kind means no hybrid and no threshold: today's keyword request.
+func TestBuildSearchRequestWithoutVectorsIsPlainKeyword(t *testing.T) {
+	req := buildSearchRequest(SearchParams{Query: "golang", Limit: 20})
+	if req.Hybrid != nil || req.Vector != nil || req.RankingScoreThreshold != 0 {
+		t.Errorf("request = hybrid %+v vector %v threshold %v, want a plain keyword request",
+			req.Hybrid, req.Vector, req.RankingScoreThreshold)
+	}
+}
