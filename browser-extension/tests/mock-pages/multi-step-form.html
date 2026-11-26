@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Step Application Wizard</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 40px; background: #f1f5f9; }
+    .wizard { max-width: 600px; margin: 0 auto; background: white; padding: 24px; border-radius: 8px; }
+    .step { display: none; }
+    .step.active { display: block; }
+    .actions { margin-top: 20px; display: flex; justify-content: space-between; }
+    button { padding: 8px 16px; border-radius: 4px; border: 1px solid #cbd5e1; cursor: pointer; }
+    button.primary { background: #2563eb; color: white; border: none; }
+  </style>
+</head>
+<body>
+  <div class="wizard">
+    <h3>Enterprise Multi-Step Application</h3>
+    
+    <!-- Step 1: Personal Info -->
+    <div id="step-1" class="step active">
+      <h4>Step 1: Contact Information</h4>
+      <div style="margin-bottom: 12px;">
+        <label for="step1-name">Full Name</label>
+        <input type="text" id="step1-name" name="full_name" style="width: 100%; padding: 8px;" />
+      </div>
+      <div style="margin-bottom: 12px;">
+        <label for="step1-email">Email Address</label>
+        <input type="email" id="step1-email" name="email" style="width: 100%; padding: 8px;" />
+      </div>
+      <div class="actions">
+        <div></div>
+        <button type="button" id="btn-to-step-2" class="primary" onclick="goToStep(2)">Next &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Experience & Links -->
+    <div id="step-2" class="step">
+      <h4>Step 2: Experience & Links</h4>
+      <div style="margin-bottom: 12px;">
+        <label for="step2-linkedin">LinkedIn Profile</label>
+        <input type="text" id="step2-linkedin" name="linkedin" style="width: 100%; padding: 8px;" />
+      </div>
+      <div style="margin-bottom: 12px;">
+        <label for="step2-github">GitHub Profile</label>
+        <input type="text" id="step2-github" name="github" style="width: 100%; padding: 8px;" />
+      </div>
+      <div class="actions">
+        <button type="button" onclick="goToStep(1)">&larr; Back</button>
+        <button type="button" id="btn-to-step-3" class="primary" onclick="goToStep(3)">Next &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Review & Submit -->
+    <div id="step-3" class="step">
+      <h4>Step 3: Documents & Submission</h4>
+      <div style="margin-bottom: 12px;">
+        <label for="step3-resume">Upload Resume</label>
+        <input type="file" id="step3-resume" name="resume" />
+      </div>
+      <div class="actions">
+        <button type="button" onclick="goToStep(2)">&larr; Back</button>
+        <button type="submit" id="multi-submit-btn" class="primary">Submit Application</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goToStep(stepNum) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step-' + stepNum).classList.add('active');
+    }
+  </script>
+</body>
+</html>
+

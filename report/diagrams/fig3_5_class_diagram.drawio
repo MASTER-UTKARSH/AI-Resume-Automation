@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-11-25T00:00:00.000Z" agent="JUET-CSE-DrawIO" version="24.0.0">
+  <diagram id="diag-1" name="fig3_5_class_diagram">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1180" pageHeight="740">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="ModelRouter&lt;br&gt;----------------&lt;br&gt;+ providers: Dict&lt;br&gt;+ routing_rules: Dict&lt;br&gt;----------------&lt;br&gt;+ route(task_type): str&lt;br&gt;+ generate_response()&lt;br&gt;+ orchestrate_drafter_reviewer()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="45" y="70" width="260" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="FactVerifier&lt;br&gt;----------------&lt;br&gt;+ FORBIDDEN_BUZZWORDS: Set&lt;br&gt;+ QUANT_METRIC_REGEX&lt;br&gt;----------------&lt;br&gt;+ extract_source_facts()&lt;br&gt;+ audit_tailored_bullet()&lt;br&gt;+ audit_tailored_resume()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="355" y="70" width="250" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="PostingGuard&lt;br&gt;----------------&lt;br&gt;+ INVISIBLE: str&lt;br&gt;+ HIDDEN_STYLE: Pattern&lt;br&gt;----------------&lt;br&gt;+ clean_text(raw): Dict&lt;br&gt;+ verify_source_host(url)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="650" y="70" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="EventBus&lt;br&gt;----------------&lt;br&gt;+ _redis_client&lt;br&gt;+ _subscribers: Dict&lt;br&gt;----------------&lt;br&gt;+ connect()&lt;br&gt;+ subscribe()&lt;br&gt;+ publish(event_type)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="930" y="70" width="210" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="ResumeParser&lt;br&gt;----------------&lt;br&gt;+ COMMON_SKILLS: List&lt;br&gt;----------------&lt;br&gt;+ extract_text_from_pdf()&lt;br&gt;+ parse_text(text): Dict&lt;br&gt;+ save_parsed_profile()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="45" y="275" width="250" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="VectorStore&lt;br&gt;----------------&lt;br&gt;+ dim: int = 128&lt;br&gt;+ job_index: IndexFlatIP&lt;br&gt;+ resume_index: IndexFlatIP&lt;br&gt;----------------&lt;br&gt;+ generate_embedding()&lt;br&gt;+ add_job() / add_resume()&lt;br&gt;+ search_jobs_for_resume()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="345" y="275" width="260" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="MatchingEngine&lt;br&gt;----------------&lt;br&gt;+ WEIGHT_SEMANTIC = 0.40&lt;br&gt;+ WEIGHT_SKILLS = 0.30&lt;br&gt;----------------&lt;br&gt;+ compute_match()&lt;br&gt;+ match_candidate_against_all()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="650" y="275" width="260" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="GhostJobDetector&lt;br&gt;----------------&lt;br&gt;+ structural_flags: List&lt;br&gt;+ outcome_flags: List&lt;br&gt;----------------&lt;br&gt;+ evaluate_job_legitimacy()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="945" y="275" width="195" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="WebSocketManager (TS)&lt;br&gt;----------------&lt;br&gt;- ws: WebSocket&lt;br&gt;- reconnectAttempts: int&lt;br&gt;----------------&lt;br&gt;+ connect()&lt;br&gt;+ scheduleReconnect()&lt;br&gt;+ send(eventType, payload)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#B45309;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="45" y="505" width="265" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="MessageRouter (TS)&lt;br&gt;----------------&lt;br&gt;- wsManager: WebSocketMgr&lt;br&gt;----------------&lt;br&gt;+ handleBackendEvent()&lt;br&gt;+ queryTargetTabs(url)&lt;br&gt;+ sendTabMessageWithRetry()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#B45309;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="355" y="505" width="265" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="FormMapper (TS)&lt;br&gt;----------------&lt;br&gt;- rules: DetectionRule[]&lt;br&gt;----------------&lt;br&gt;+ extractFormFields(doc)&lt;br&gt;+ resolveProfileValue()&lt;br&gt;+ validateForm(fields)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#B45309;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="665" y="505" width="240" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="AutofillEngine (TS)&lt;br&gt;----------------&lt;br&gt;+ fillField(field, val)&lt;br&gt;+ fillBatch(actions)&lt;br&gt;+ attachResumePDF()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#B45309;strokeWidth=1.5;fontSize=9.5;fontStyle=0;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="940" y="505" width="200" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="audits" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="queries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="8" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="penalizes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="8" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="sanitizes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="6" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="routes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="10" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="dispatches" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="11" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="action plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="12" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

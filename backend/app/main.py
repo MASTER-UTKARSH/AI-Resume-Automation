@@ -6,7 +6,7 @@ from backend.app.core.config import settings
 from backend.app.core.event_bus import event_bus
 from backend.app.database.session import init_db, SessionLocal
 from backend.app.services.seed_data import seed_database
-from backend.app.api import resumes, jobs, agent, telemetry
+from backend.app.api import resumes, jobs, agent, telemetry, extension
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("App")
@@ -68,6 +68,7 @@ app.include_router(resumes.router, prefix="/api")
 app.include_router(jobs.router, prefix="/api")
 app.include_router(agent.router, prefix="/api")
 app.include_router(telemetry.router, prefix="/api")
+app.include_router(extension.router, prefix="/api")
 
 @app.get("/")
 @app.get("/app")

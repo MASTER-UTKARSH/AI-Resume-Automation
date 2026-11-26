@@ -41,4 +41,8 @@ class Settings(BaseModel):
     QWEN_API_KEY: str = os.getenv("QWEN_API_KEY", "")
     OLLAMA_HOST: str = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 
+    # Apify Web Scraper configurations
+    APIFY_API_TOKEN: str = os.getenv("APIFY_API_TOKEN", "")
+    APIFY_USER_ID: str = os.getenv("APIFY_USER_ID", "")
+
 settings = Settings()

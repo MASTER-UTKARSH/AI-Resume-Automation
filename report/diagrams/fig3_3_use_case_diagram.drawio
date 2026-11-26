@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-11-25T00:00:00.000Z" agent="JUET-CSE-DrawIO" version="24.0.0">
+  <diagram id="diag-1" name="fig3_3_use_case_diagram">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="720">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Clyde AI Career Automation System Boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#334155;dashed=1;verticalAlign=top;fontStyle=1;fontSize=12;spacingTop=6;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="250" y="55" width="600" height="625" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="&lt;&lt;Actor&gt;&gt;&lt;br&gt;Candidate /&lt;br&gt;JUET Student" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#1D4ED8;strokeWidth=1.5;fontSize=11;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="260" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="&lt;&lt;Actor&gt;&gt;&lt;br&gt;LLM Providers&lt;br&gt;(Groq/GLM/Qwen)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#6D28D9;strokeWidth=1.5;fontSize=11;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="910" y="140" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="&lt;&lt;Actor&gt;&gt;&lt;br&gt;Apify Live&lt;br&gt;Job Scraper" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;strokeWidth=1.5;fontSize=11;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="910" y="310" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="&lt;&lt;Actor&gt;&gt;&lt;br&gt;External ATS&lt;br&gt;Job Portals" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#B45309;strokeWidth=1.5;fontSize=11;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="910" y="485" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="UC1: Upload &amp; Parse&lt;br&gt;PDF Resume" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="310" y="95" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="UC2: Run PostingGuard&lt;br&gt;Security Scan" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="570" y="95" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="UC3: Discover Live Jobs&lt;br&gt;by City &amp; Skills" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="310" y="200" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="UC4: Compute 4-Factor&lt;br&gt;FAISS Match Score" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="570" y="200" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="UC5: Tailor Resume&lt;br&gt;(Drafter-Reviewer Loop)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="310" y="315" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="UC6: Audit Provenance&lt;br&gt;(FactVerifier Gate)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="570" y="315" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="UC7: Compile &amp; Export&lt;br&gt;Jake's LaTeX PDF" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="310" y="430" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="UC8: Map &amp; Autofill&lt;br&gt;Form via Extension" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="570" y="430" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="UC9: Review Preview &amp;&lt;br&gt;Approve Final Submission" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1E40AF;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="440" y="560" width="230" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="3" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="3" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="3" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="3" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="3" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="3" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="7" target="8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="9" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="11" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="14" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="11" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="9" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="14" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="Manual Confirm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.4;fontSize=10;fontColor=#1E293B;" edge="1" parent="1" source="15" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

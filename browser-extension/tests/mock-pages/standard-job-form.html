@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Acme Corp - Senior Software Engineer Application</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 40px; background: #f8fafc; color: #1e293b; }
+    .card { max-width: 650px; margin: 0 auto; background: white; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+      width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px;
+    }
+    .required::after { content: " *"; color: #ef4444; }
+    button[type="submit"] {
+      background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Apply for Senior Full-Stack Engineer</h2>
+    <p>Acme Corp &bull; Bengaluru / Remote &bull; Full-time</p>
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+    <form id="job-application-form" action="/submit" method="POST">
+      <div class="form-group">
+        <label for="full_name" class="required">Full Name</label>
+        <input type="text" id="full_name" name="full_name" placeholder="e.g. Utkarsh Shah" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="required">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="name@domain.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210">
+      </div>
+
+      <div class="form-group">
+        <label for="location">Current Location</label>
+        <input type="text" id="location" name="location" placeholder="City, Country">
+      </div>
+
+      <div class="form-group">
+        <label for="linkedin_url">LinkedIn Profile</label>
+        <input type="text" id="linkedin_url" name="linkedin_url" placeholder="https://linkedin.com/in/username">
+      </div>
+
+      <div class="form-group">
+        <label for="github_url">GitHub Profile</label>
+        <input type="text" id="github_url" name="github_url" placeholder="https://github.com/username">
+      </div>
+
+      <div class="form-group">
+        <label for="work_authorization">Are you legally authorized to work in India?</label>
+        <select id="work_authorization" name="work_authorization">
+          <option value="">Select option</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="resume-file" class="required">Attach Resume (PDF / DOCX)</label>
+        <input type="file" id="resume-file" name="resume" accept=".pdf,.doc,.docx" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cover_letter_text">Cover Letter / Note to Hiring Manager</label>
+        <textarea id="cover_letter_text" name="cover_letter" rows="4" placeholder="Brief statement about your interest..."></textarea>
+      </div>
+
+      <button type="submit" id="submit-application-btn">Submit Application</button>
+    </form>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Security Gated Application - CAPTCHA Protected</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 40px; background: #fff1f2; }
+    .card { max-width: 600px; margin: 0 auto; background: white; padding: 24px; border-radius: 8px; border: 1px solid #fecdd3; }
+    .captcha-box { margin: 20px 0; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Secure Portal Application</h2>
+    <p>This portal requires human verification before application dispatch.</p>
+
+    <form id="captcha-protected-form">
+      <div>
+        <label for="sec-name">Full Name</label>
+        <input type="text" id="sec-name" name="name" value="Utkarsh Shah" style="width:100%; padding:8px;" />
+      </div>
+
+      <div class="captcha-box">
+        <!-- Cloudflare Turnstile / reCAPTCHA simulated iframe / container -->
+        <div id="cf-turnstile-wrapper" class="cf-turnstile">
+          <iframe src="about:blank" title="Human Verification Challenge" id="turnstile-frame" style="width:300px; height:65px; border:none;"></iframe>
+        </div>
+        <p style="font-size: 12px; color: #64748b; margin-top: 6px;">Protected by Cloudflare Turnstile Verification</p>
+      </div>
+
+      <button type="submit" id="captcha-submit-btn" style="background:#dc2626; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer;">
+        Submit with Verification
+      </button>
+    </form>
+  </div>
+</body>
+</html>
+

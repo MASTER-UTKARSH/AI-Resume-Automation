@@ -21,9 +21,9 @@
             "surface-dim": "#131313",
             "surface-container": "#1f1f1f",
             "surface-container-high": "#2a2a2a",
-            "emerald": "#10b981",
-            "amber": "#f59e0b",
-            "rose": "#f43f5e"
+            "emerald": { DEFAULT: "#10b981", 400: "#34d399", 500: "#10b981" },
+            "amber": { DEFAULT: "#f59e0b", 400: "#fbbf24", 500: "#f59e0b" },
+            "rose": { DEFAULT: "#f43f5e", 400: "#fb7185", 500: "#f43f5e" }
           },
           borderRadius: {
             "DEFAULT": "0.25rem",
@@ -218,7 +218,7 @@
     <header class="h-16 px-8 flex justify-between items-center border-b border-char/40 sticky top-0 z-40 bg-obsidian/85 backdrop-blur-md">
       <div class="flex items-center gap-4">
         <h2 id="page-title" class="font-heading text-lg text-bone">Clyde</h2>
-        <span class="text-xs font-label text-slate uppercase tracking-widest">• Career Partner</span>
+        <span id="page-subtitle" class="text-xs font-label text-slate uppercase tracking-widest">• Career Partner</span>
       </div>
 
       <div class="flex items-center gap-4">
@@ -258,6 +258,14 @@
 
             <!-- Stitch Action Pills -->
             <div class="flex flex-wrap justify-center gap-3">
+              <button onclick="sendQuickPrompt('Find me jobs in Guna')" class="border border-emerald/50 bg-emerald/5 hover:border-emerald text-emerald transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">travel_explore</span>
+                Find Jobs in Guna (Apify Live)
+              </button>
+              <button onclick="sendQuickPrompt('Find me jobs in Bangalore')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">location_city</span>
+                Jobs in Bangalore
+              </button>
               <button onclick="sendQuickPrompt('Optimize my resume for full-stack and AI roles')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">description</span>
                 Optimize my resume
@@ -265,10 +273,6 @@
               <button onclick="switchTab('jobs'); triggerJobMatch();" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">bolt</span>
                 Run FAISS Job Match
-              </button>
-              <button onclick="sendQuickPrompt('Draft a tailored cover letter for NVIDIA AI Engineer Intern role')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">mail</span>
-                Draft NVIDIA Cover Letter
               </button>
               <button onclick="switchTab('ats')" class="border border-char hover:border-bone text-bone transition-colors rounded-full px-5 py-2 font-label text-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
@@ -308,7 +312,8 @@
         </div>
 
         <!-- Stitch Upload Dropzone -->
-        <div onclick="document.getElementById('pdf-file-input').click()" 
+        <div id="resume-dropzone" onclick="document.getElementById('pdf-file-input').click()" 
+             ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
              class="w-full border border-dashed border-bone/60 hover:border-bone rounded-xl flex flex-col items-center justify-center py-12 px-6 hover:bg-char/30 transition-all cursor-pointer group text-center">
           <input type="file" id="pdf-file-input" accept=".pdf" class="hidden" onchange="handleFileUpload(event)" />
           <div class="bg-obsidian border border-bone rounded-full p-3 mb-4 group-hover:scale-105 transition-transform">
@@ -316,7 +321,7 @@
           </div>
           <h2 class="font-heading text-xl text-bone mb-1">Upload Resume PDF</h2>
           <p class="font-body text-sm text-slate max-w-sm">Drag and drop your resume here, or click to browse. Clyde extracts text and computes ATS scoring.</p>
-          <button class="mt-6 bg-bone text-obsidian rounded-full py-2 px-6 font-label text-xs font-bold border border-bone hover:bg-transparent hover:text-bone transition-colors">
+          <button type="button" class="mt-6 bg-bone text-obsidian rounded-full py-2 px-6 font-label text-xs font-bold border border-bone hover:bg-transparent hover:text-bone transition-colors">
             Browse Files
           </button>
         </div>
@@ -421,7 +426,7 @@
             <h1 class="font-heading text-4xl md:text-5xl text-bone tracking-tight mb-2">Job Discovery</h1>
             <p class="font-body text-slate text-sm">Semantic matching powered by 128-D FAISS IndexFlatIP & 4-factor hybrid scoring.</p>
           </div>
-          <button onclick="triggerJobMatch()" class="bg-bone text-obsidian rounded-full px-6 py-2.5 font-label text-sm font-bold hover:bg-transparent hover:text-bone hover:border hover:border-bone transition-colors flex items-center gap-2 shrink-0">
+          <button onclick="triggerJobMatch()" class="bg-bone text-obsidian border border-bone rounded-full px-6 py-2.5 font-label text-sm font-bold hover:bg-transparent hover:text-bone transition-colors flex items-center gap-2 shrink-0">
             <span class="material-symbols-outlined text-sm">bolt</span>
             <span id="match-btn-text">Run FAISS Multi-Factor Match</span>
           </button>
@@ -453,11 +458,11 @@
         <!-- Filter and Search Row -->
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-char pb-4">
           <div class="flex flex-wrap gap-2">
-            <button onclick="applyJobFilter('all', this)" class="filter-chip px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-xs font-bold transition-colors">All Roles</button>
-            <button onclick="applyJobFilter('ai', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">AI & Machine Learning</button>
-            <button onclick="applyJobFilter('distributed', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Backend & Systems</button>
-            <button onclick="applyJobFilter('bangalore', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Bangalore</button>
-            <button onclick="applyJobFilter('remote', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Remote</button>
+            <button data-filter="all" onclick="applyJobFilter('all', this)" class="filter-chip px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-xs font-bold transition-colors">All Roles</button>
+            <button data-filter="ai" onclick="applyJobFilter('ai', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">AI & Machine Learning</button>
+            <button data-filter="distributed" onclick="applyJobFilter('distributed', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Backend & Systems</button>
+            <button data-filter="bangalore" onclick="applyJobFilter('bangalore', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Bangalore</button>
+            <button data-filter="remote" onclick="applyJobFilter('remote', this)" class="filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors">Remote</button>
           </div>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate text-sm">search</span>
@@ -485,7 +490,7 @@
           <!-- Circular Gauge Card -->
           <div class="border border-char rounded-xl p-8 bg-surface-dim flex flex-col items-center text-center justify-center">
             <div class="w-28 h-28 rounded-full border-4 border-emerald flex items-center justify-center mb-4">
-              <span class="font-heading text-3xl text-bone font-bold">94%</span>
+              <span id="ats-view-score" class="font-heading text-3xl text-bone font-bold">94%</span>
             </div>
             <h3 class="font-heading text-xl text-bone mb-1">Excellent Score</h3>
             <p class="text-xs text-slate font-body max-w-xs">High pass rate for tech ATS filters. Standard single-column format with zero parsing conflicts.</p>
@@ -532,7 +537,7 @@
           <div class="space-y-4">
             <div>
               <span class="text-xs font-label text-slate uppercase tracking-wider block mb-2">Verified in Active Resume:</span>
-              <div class="flex flex-wrap gap-2">
+              <div id="ats-verified-skills" class="flex flex-wrap gap-2">
                 <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">Python</span>
                 <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">FastAPI</span>
                 <span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">FAISS</span>
@@ -637,10 +642,14 @@
         <div id="modal-skills" class="flex flex-wrap gap-2"></div>
       </div>
 
-      <div class="flex gap-4 pt-4 border-t border-char">
-        <button id="modal-tailor-btn" class="flex-1 bg-bone text-obsidian rounded-full py-2.5 font-label text-xs font-bold hover:bg-slate transition-colors flex items-center justify-center gap-2">
+      <div class="flex flex-wrap gap-3 pt-4 border-t border-char">
+        <button id="modal-tailor-btn" class="flex-1 bg-bone text-obsidian rounded-full py-2.5 px-4 font-label text-xs font-bold hover:bg-slate transition-colors flex items-center justify-center gap-2">
           <span class="material-symbols-outlined text-sm">auto_fix_high</span> Tailor Resume for This Role
         </button>
+        <a id="modal-apply-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-5 py-2.5 rounded-full border border-emerald/70 text-emerald text-xs font-bold hover:bg-emerald hover:text-obsidian transition-colors flex items-center gap-1.5">
+          <span>Apply Official</span>
+          <span class="material-symbols-outlined text-xs">open_in_new</span>
+        </a>
         <button onclick="closeJobModal()" class="px-6 py-2.5 rounded-full border border-char text-xs text-bone hover:border-bone transition-colors">
           Close
         </button>
@@ -747,7 +756,7 @@
       <div class="sticky top-0 bg-char text-bone px-8 py-4 flex justify-between items-center border-b border-char z-10">
         <div class="flex items-center gap-2 text-xs font-label">
           <span class="material-symbols-outlined text-emerald text-sm">verified</span>
-          <span>ATS Compliant Single-Column Format (94% Compliance)</span>
+          <span id="preview-ats-badge">ATS Compliant Single-Column Format (94% Compliance)</span>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="downloadCompiledPdf()" class="px-3.5 py-1.5 rounded-full bg-emerald text-obsidian text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-1.5 shadow-sm" title="Compile and download ATS-optimized PDF via Tectonic engine">
@@ -804,7 +813,7 @@
                 <span>Feb 2026 – Present</span>
               </div>
               <div class="text-xs text-[#4b5563] mb-1">JUET Capstone Project • Python, FastAPI, FAISS, Redis, React</div>
-              <ul class="list-disc list-inside text-xs text-[#374151] space-y-1">
+              <ul id="doc-bullets-list" class="list-disc list-inside text-xs text-[#374151] space-y-1">
                 <li id="doc-bullet-1">Architected an event-driven multi-agent platform using FastAPI and FAISS, reducing semantic matching latency by 42% across candidate profiles with 94% ATS compliance.</li>
                 <li>Engineered 4-factor hybrid ranking algorithm combining 128-D dense embeddings, skill keyword overlap, experience alignment, and candidate preferences.</li>
                 <li>Implemented decoupled event bus supporting Redis Pub/Sub with transparent async in-memory failover.</li>
@@ -834,7 +843,102 @@
   <script>
     let currentResumeId = null;
     let allJobs = [];
+    let jobsById = {};
+    let lastMatchesMap = {};
     let currentFilter = 'all';
+    let currentTailoredBullets = [];
+    let bubbleSeq = 0;
+    const chatMessageStore = new Map();
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function safeUrl(url) {
+      if (!url) return '#';
+      const trimmed = String(url).trim();
+      if (/^(https?:\/\/|\/)/i.test(trimmed)) return escapeHtml(trimmed);
+      return '#';
+    }
+
+    function syncAtsScoreUI(scoreText) {
+      const normalized = String(scoreText).endsWith('%') ? String(scoreText) : `${scoreText}%`;
+      const resumeScore = document.getElementById('resume-ats-score');
+      if (resumeScore) resumeScore.innerText = normalized;
+      const atsViewScore = document.getElementById('ats-view-score');
+      if (atsViewScore) atsViewScore.innerText = normalized;
+      const previewBadge = document.getElementById('preview-ats-badge');
+      if (previewBadge) previewBadge.innerText = `ATS Compliant Single-Column Format (${normalized} Compliance)`;
+    }
+
+    function syncCandidateUI(profileData, atsScore) {
+      if (!profileData) return;
+      const name = profileData.name || profileData.full_name || 'Utkarsh Shah';
+      const email = profileData.email || 'utkarsh.shah@juetguna.in';
+      const phone = profileData.phone || '+91 9876543210';
+      const skills = Array.isArray(profileData.skills) ? profileData.skills : [];
+
+      const elName = document.getElementById('profile-name');
+      if (elName) elName.innerText = name;
+      const elEmail = document.getElementById('profile-email');
+      if (elEmail) elEmail.innerText = email;
+      const elPhone = document.getElementById('profile-phone');
+      if (elPhone) elPhone.innerText = phone;
+
+      const docName = document.getElementById('doc-name');
+      if (docName) docName.innerText = name;
+      const docEmail = document.getElementById('doc-email');
+      if (docEmail) docEmail.innerText = email;
+      const docPhone = document.getElementById('doc-phone');
+      if (docPhone) docPhone.innerText = phone;
+
+      if (atsScore !== undefined && atsScore !== null) {
+        syncAtsScoreUI(Math.round(atsScore));
+      }
+
+      if (skills.length > 0) {
+        const badge = document.getElementById('skills-count-badge');
+        if (badge) badge.innerText = `${skills.length} Skills`;
+
+        const skillsContainer = document.getElementById('skills-list-container');
+        if (skillsContainer) {
+          skillsContainer.innerHTML = skills.map(s =>
+            `<span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" data-skill="${escapeHtml(s)}" onclick="filterBySkill(this.dataset.skill)">${escapeHtml(s)}</span>`
+          ).join('');
+        }
+
+        const atsVerified = document.getElementById('ats-verified-skills');
+        if (atsVerified) {
+          atsVerified.innerHTML = skills.map(s =>
+            `<span class="px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5">${escapeHtml(s)}</span>`
+          ).join('');
+        }
+
+        const docSkills = document.getElementById('doc-skills');
+        if (docSkills) {
+          docSkills.innerHTML = `<strong>Verified Technical Stack:</strong> ${skills.map(escapeHtml).join(', ')}`;
+        }
+      }
+    }
+
+    function syncTailoredBulletsUI(bullets, atsScore = 99) {
+      if (Array.isArray(bullets) && bullets.length > 0) {
+        currentTailoredBullets = bullets;
+        const bulletsList = document.getElementById('doc-bullets-list');
+        if (bulletsList) {
+          bulletsList.innerHTML = bullets.map((b, idx) =>
+            `<li${idx === 0 ? ' id="doc-bullet-1"' : ''}>${escapeHtml(b)}</li>`
+          ).join('');
+        }
+      }
+      syncAtsScoreUI(atsScore);
+    }
 
     function switchTab(tabId) {
       document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
@@ -854,15 +958,16 @@
         activePanel.classList.remove('hidden');
       }
 
-      const titles = {
-        'agent': 'Clyde • Career Partner',
-        'resumes': 'Clyde • Your Library',
-        'jobs': 'Clyde • Job Discovery',
-        'ats': 'Clyde • ATS Audit',
-        'telemetry': 'Clyde • Architecture'
+      const subtitles = {
+        'agent': '• Career Partner',
+        'resumes': '• Your Library',
+        'jobs': '• Job Discovery',
+        'ats': '• ATS Audit',
+        'telemetry': '• Architecture'
       };
-      if (titles[tabId]) {
-        document.getElementById('page-title').innerText = titles[tabId];
+      const subtitleEl = document.getElementById('page-subtitle');
+      if (subtitleEl && subtitles[tabId]) {
+        subtitleEl.innerText = subtitles[tabId];
       }
 
       if (tabId === 'jobs' && allJobs.length === 0) {
@@ -876,11 +981,15 @@
     async function fetchJobs() {
       try {
         const res = await fetch('/api/jobs');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         allJobs = data.jobs || [];
-        renderJobs(allJobs);
+        jobsById = {};
+        allJobs.forEach(j => { jobsById[j.job_id] = j; });
+        renderJobs(allJobs, lastMatchesMap);
       } catch (e) {
         console.error("Jobs error:", e);
+        showToast("Failed to load jobs", true);
       }
     }
 
@@ -888,7 +997,7 @@
       const container = document.getElementById('jobs-grid-container');
       container.innerHTML = '';
 
-      if (jobs.length === 0) {
+      if (!jobs || jobs.length === 0) {
         container.innerHTML = '<div class="col-span-2 text-center text-slate text-sm py-12">No roles match the selected filter.</div>';
         return;
       }
@@ -896,10 +1005,10 @@
       jobs.forEach(job => {
         const match = matchesMap[job.job_id];
         const score = match ? match.overall_score : null;
-        const matchingSkills = match ? match.matching_skills : (job.required_skills ? job.required_skills.slice(0, 3) : []);
-        const missingSkills = match ? match.missing_skills : (job.required_skills ? job.required_skills.slice(3) : []);
+        const matchingSkills = match ? (match.matching_skills || []) : (job.required_skills ? job.required_skills.slice(0, 3) : []);
+        const missingSkills = match ? (match.missing_skills || []) : (job.required_skills ? job.required_skills.slice(3) : []);
 
-        const ghost = match?.ghost_verdict || (job.title.toLowerCase().includes('distributed') ? 'POSSIBLE' : 'HEALTHY');
+        const ghost = match?.ghost_verdict || ((job.title || '').toLowerCase().includes('distributed') ? 'POSSIBLE' : 'HEALTHY');
         let ghostBadge = '';
         if (ghost === 'HEALTHY') {
           ghostBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border border-emerald/40 text-emerald bg-emerald/5 inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald"></span> Verified Active</span>`;
@@ -916,45 +1025,51 @@
             <div class="flex justify-between items-start mb-3">
               <div>
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="text-xs font-label uppercase tracking-widest text-slate">${job.company}</span>
+                  <span class="text-xs font-label uppercase tracking-widest text-slate">${escapeHtml(job.company)}</span>
                   ${ghostBadge}
                 </div>
-                <h3 class="font-heading text-xl text-bone">${job.title}</h3>
-                <p class="text-xs text-slate mt-1">${job.location} • ${job.experience_level || 'Internship'}</p>
+                <h3 class="font-heading text-xl text-bone">${escapeHtml(job.title)}</h3>
+                <p class="text-xs text-slate mt-1">${escapeHtml(job.location)} • ${escapeHtml(job.experience_level || 'Internship')}</p>
               </div>
               ${score ? `
                 <div class="w-12 h-12 rounded-full bg-solstice-gradient flex items-center justify-center text-obsidian font-heading font-bold text-base shadow-[0_0_15px_rgba(255,132,0,0.3)] shrink-0">
-                  ${score}%
+                  ${escapeHtml(score)}%
                 </div>
               ` : `
                 <div class="px-3 py-1 rounded-full border border-char text-[11px] text-slate font-mono">Unranked</div>
               `}
             </div>
 
-            <p class="text-xs text-slate font-body line-clamp-2 mb-4 leading-relaxed">${job.description}</p>
+            <p class="text-xs text-slate font-body line-clamp-2 mb-4 leading-relaxed">${escapeHtml(job.description)}</p>
 
             <div class="space-y-2 mb-4">
               <div class="flex flex-wrap gap-1.5">
-                ${matchingSkills.map(s => `<span class="px-2.5 py-0.5 rounded-full text-[11px] border border-emerald/40 text-emerald bg-emerald/5">${s}</span>`).join('')}
-                ${missingSkills.map(s => `<span class="px-2.5 py-0.5 rounded-full text-[11px] border border-amber/40 text-amber bg-amber/5">${s}</span>`).join('')}
+                ${matchingSkills.map(s => `<span class="px-2.5 py-0.5 rounded-full text-[11px] border border-emerald/40 text-emerald bg-emerald/5">${escapeHtml(s)}</span>`).join('')}
+                ${missingSkills.map(s => `<span class="px-2.5 py-0.5 rounded-full text-[11px] border border-amber/40 text-amber bg-amber/5">${escapeHtml(s)}</span>`).join('')}
               </div>
               ${match && match.reason ? `
-                <p class="text-[11px] text-slate italic bg-obsidian p-2 rounded border border-char/60 font-body">${match.reason}</p>
+                <p class="text-[11px] text-slate italic bg-obsidian p-2 rounded border border-char/60 font-body">${escapeHtml(match.reason)}</p>
               ` : ''}
             </div>
           </div>
 
           <div class="flex gap-2 pt-4 border-t border-char mt-auto">
-            <button onclick="openJobModal('${job.job_id}')" class="flex-1 py-1.5 rounded-full border border-char text-xs text-bone hover:border-bone transition-colors">
+            <button data-job-id="${escapeHtml(job.job_id)}" onclick="openJobModal(this.dataset.jobId)" class="flex-1 py-1.5 rounded-full border border-char text-xs text-bone hover:border-bone transition-colors">
               Details
             </button>
-            <button onclick="openDrafterReviewerModal('${job.title}', '${job.company}', '${(job.required_skills||[]).join(', ')}')" class="px-4 py-1.5 rounded-full bg-bone text-obsidian text-xs font-bold hover:bg-slate transition-colors flex items-center gap-1.5 shrink-0">
-              <span class="material-symbols-outlined text-xs">auto_awesome</span> Tailor & Audit
+            <button data-job-id="${escapeHtml(job.job_id)}" onclick="openDrafterReviewerByJobId(this.dataset.jobId)" class="px-4 py-1.5 rounded-full bg-bone text-obsidian text-xs font-bold hover:bg-slate transition-colors flex items-center gap-1.5 shrink-0">
+              <span class="material-symbols-outlined text-xs">auto_awesome</span> Tailor &amp; Audit
             </button>
           </div>
         `;
         container.appendChild(card);
       });
+    }
+
+    function openDrafterReviewerByJobId(jobId) {
+      const job = jobsById[jobId] || allJobs.find(j => j.job_id === jobId);
+      if (!job) return;
+      openDrafterReviewerModal(job.title, job.company, (job.required_skills || []).join(', '));
     }
 
     async function triggerJobMatch() {
@@ -976,10 +1091,12 @@
           })
         });
 
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (data.status === 'success') {
           const matchesMap = {};
-          data.matches.forEach(m => { matchesMap[m.job_id] = m; });
+          (data.matches || []).forEach(m => { matchesMap[m.job_id] = m; });
+          lastMatchesMap = matchesMap;
 
           allJobs.sort((a, b) => {
             const scoreA = matchesMap[a.job_id]?.overall_score || 0;
@@ -987,8 +1104,10 @@
             return scoreB - scoreA;
           });
 
-          renderJobs(allJobs, matchesMap);
-          showToast(`FAISS match complete! Top: ${data.matches[0].title} (${data.matches[0].overall_score}%)`);
+          applyJobFilter(currentFilter);
+          if (data.matches && data.matches.length > 0) {
+            showToast(`FAISS match complete! Top: ${data.matches[0].title} (${data.matches[0].overall_score}%)`);
+          }
           logEvent('MATCH_COMPUTED', `4-factor hybrid ranking computed across ${data.total_matches} roles.`);
         }
       } catch (e) {
@@ -998,43 +1117,46 @@
       }
     }
 
+    function getFilteredJobsByChip(filter) {
+      if (filter === 'ai') return allJobs.filter(j => j.title.toLowerCase().includes('ai') || j.title.toLowerCase().includes('learning'));
+      if (filter === 'distributed') return allJobs.filter(j => j.title.toLowerCase().includes('distributed') || j.title.toLowerCase().includes('backend') || j.title.toLowerCase().includes('cloud'));
+      if (filter === 'bangalore') return allJobs.filter(j => (j.location || '').toLowerCase().includes('bangalore') || (j.location || '').toLowerCase().includes('bengaluru'));
+      if (filter === 'remote') return allJobs.filter(j => (j.location || '').toLowerCase().includes('remote') || (j.location || '').toLowerCase().includes('hybrid'));
+      return allJobs;
+    }
+
     function applyJobFilter(filter, el) {
       document.querySelectorAll('.filter-chip').forEach(c => {
         c.className = "filter-chip px-4 py-1.5 rounded-full border border-char text-slate hover:border-bone hover:text-bone font-label text-xs transition-colors";
       });
-      if (el) {
-        el.className = "filter-chip px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-xs font-bold transition-colors";
+      const targetEl = el || document.querySelector(`.filter-chip[data-filter="${filter}"]`);
+      if (targetEl) {
+        targetEl.className = "filter-chip px-4 py-1.5 rounded-full bg-bone text-obsidian font-label text-xs font-bold transition-colors";
       }
       currentFilter = filter;
-
-      let filtered = allJobs;
-      if (filter === 'ai') filtered = allJobs.filter(j => j.title.toLowerCase().includes('ai') || j.title.toLowerCase().includes('learning'));
-      else if (filter === 'distributed') filtered = allJobs.filter(j => j.title.toLowerCase().includes('distributed') || j.title.toLowerCase().includes('backend') || j.title.toLowerCase().includes('cloud'));
-      else if (filter === 'bangalore') filtered = allJobs.filter(j => j.location.toLowerCase().includes('bangalore'));
-      else if (filter === 'remote') filtered = allJobs.filter(j => j.location.toLowerCase().includes('remote') || j.location.toLowerCase().includes('hybrid'));
-
-      renderJobs(filtered);
+      const searchEl = document.getElementById('job-search-input');
+      const q = searchEl ? searchEl.value.toLowerCase().trim() : '';
+      let filtered = getFilteredJobsByChip(filter);
+      if (q) {
+        filtered = filtered.filter(j =>
+          (j.title || '').toLowerCase().includes(q) ||
+          (j.company || '').toLowerCase().includes(q) ||
+          (j.location || '').toLowerCase().includes(q) ||
+          (j.required_skills && j.required_skills.some(s => s.toLowerCase().includes(q)))
+        );
+      }
+      renderJobs(filtered, lastMatchesMap);
     }
 
     function handleJobSearch(e) {
-      const q = e.target.value.toLowerCase().trim();
-      if (!q) {
-        applyJobFilter(currentFilter);
-        return;
-      }
-      const filtered = allJobs.filter(j => 
-        j.title.toLowerCase().includes(q) || 
-        j.company.toLowerCase().includes(q) || 
-        (j.required_skills && j.required_skills.some(s => s.toLowerCase().includes(q)))
-      );
-      renderJobs(filtered);
+      applyJobFilter(currentFilter);
     }
 
     function filterBySkill(skill) {
       switchTab('jobs');
       const input = document.getElementById('job-search-input');
-      input.value = skill;
-      handleJobSearch({ target: input });
+      input.value = skill || '';
+      applyJobFilter('all');
     }
 
     function quickTailorResume(role, company) {
@@ -1044,16 +1166,26 @@
     }
 
     function openJobModal(jobId) {
-      const job = allJobs.find(j => j.job_id === jobId);
+      const job = jobsById[jobId] || allJobs.find(j => j.job_id === jobId);
       if (!job) return;
 
       document.getElementById('modal-company').innerText = job.company;
       document.getElementById('modal-title').innerText = job.title;
-      document.getElementById('modal-location').innerText = job.location + " • " + (job.experience_level || 'Entry-Level');
+      document.getElementById('modal-location').innerText = (job.location || 'India') + " • " + (job.experience_level || 'Entry-Level');
       document.getElementById('modal-desc').innerText = job.description;
 
       const skillsBox = document.getElementById('modal-skills');
-      skillsBox.innerHTML = (job.required_skills || []).map(s => `<span class="px-3 py-1 rounded-full text-xs border border-char text-bone">${s}</span>`).join('');
+      skillsBox.innerHTML = (job.required_skills || []).map(s => `<span class="px-3 py-1 rounded-full text-xs border border-char text-bone">${escapeHtml(s)}</span>`).join('');
+
+      const applyLink = document.getElementById('modal-apply-link');
+      if (applyLink) {
+        if (job.job_url) {
+          applyLink.href = safeUrl(job.job_url);
+          applyLink.classList.remove('hidden');
+        } else {
+          applyLink.classList.add('hidden');
+        }
+      }
 
       document.getElementById('modal-tailor-btn').onclick = () => {
         closeJobModal();
@@ -1065,7 +1197,8 @@
       modal.classList.add('flex');
     }
 
-    function closeJobModal() {
+    function closeJobModal(e) {
+      if (e && e.target !== e.currentTarget) return;
       const modal = document.getElementById('job-modal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
@@ -1077,7 +1210,8 @@
       modal.classList.add('flex');
     }
 
-    function closeResumePreview() {
+    function closeResumePreview(e) {
+      if (e && e.target !== e.currentTarget) return;
       const modal = document.getElementById('resume-preview-modal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
@@ -1165,16 +1299,14 @@
     }
 
     function applyOptimizedBullet() {
-      const docBullet = document.getElementById('doc-bullet-1');
       const optimizedText = document.getElementById('bullet-optimized-text').innerText;
-      if (docBullet) docBullet.innerText = optimizedText;
+      syncTailoredBulletsUI([optimizedText, ...(currentTailoredBullets.slice(1))], 98);
 
       const btn = document.getElementById('apply-bullet-btn');
-      btn.innerText = 'Applied ✓';
-      btn.className = "px-4 py-1 rounded-full border border-emerald text-emerald font-label text-xs font-bold";
-
-      const score = document.getElementById('resume-ats-score');
-      if (score) score.innerText = '98%';
+      if (btn) {
+        btn.innerText = 'Applied ✓';
+        btn.className = "px-4 py-1 rounded-full border border-emerald text-emerald font-label text-xs font-bold";
+      }
 
       showToast("XYZ bullet applied! Baseline ATS elevated to 98%.");
       logEvent('BULLET_OPTIMIZED', 'Applied high-impact XYZ quantified bullet to active resume.');
@@ -1187,29 +1319,40 @@
       }
       el.dataset.added = "true";
       el.className = "px-3 py-1.5 rounded-full text-xs border border-emerald/50 text-emerald bg-emerald/5 flex items-center gap-1.5";
-      el.innerHTML = `<span class="material-symbols-outlined text-xs">check</span> ${skill} (Added)`;
+      el.innerHTML = `<span class="material-symbols-outlined text-xs">check</span> ${escapeHtml(skill)} (Added)`;
 
       const list = document.getElementById('skills-list-container');
       if (list) {
         const pill = document.createElement('span');
         pill.className = "px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer";
         pill.innerText = skill;
+        pill.dataset.skill = skill;
         pill.onclick = () => filterBySkill(skill);
         list.appendChild(pill);
       }
 
+      const atsVerified = document.getElementById('ats-verified-skills');
+      if (atsVerified) {
+        const atsPill = document.createElement('span');
+        atsPill.className = "px-3 py-1 rounded-full text-xs border border-emerald/40 text-emerald bg-emerald/5";
+        atsPill.innerText = skill;
+        atsVerified.appendChild(atsPill);
+      }
+
       const badge = document.getElementById('skills-count-badge');
       if (badge) {
-        const c = parseInt(badge.innerText) || 12;
+        const c = parseInt(badge.innerText, 10) || 12;
         badge.innerText = (c + 1) + " Skills";
       }
 
       const docSkills = document.getElementById('doc-skills');
-      if (docSkills) docSkills.innerHTML += `, ${skill}`;
+      if (docSkills) {
+        const span = document.createElement('span');
+        span.innerText = `, ${skill}`;
+        docSkills.appendChild(span);
+      }
 
-      const score = document.getElementById('resume-ats-score');
-      if (score) score.innerText = '97%';
-
+      syncAtsScoreUI(97);
       showToast(`Injected '${skill}' into profile!`);
       logEvent('SKILL_INJECTED', `Injected target keyword '${skill}'.`);
     }
@@ -1232,25 +1375,16 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
           method: 'POST',
           body: formData
         });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
         if (data.status === 'success') {
           currentResumeId = data.resume_id;
-          document.getElementById('profile-name').innerText = data.profile.name;
-          document.getElementById('profile-email').innerText = data.profile.email;
-          document.getElementById('profile-phone').innerText = data.profile.phone;
-          document.getElementById('resume-ats-score').innerText = Math.round(data.ats_score) + '%';
-          document.getElementById('skills-count-badge').innerText = data.profile.skills_count + ' Skills';
-
-          const skillsContainer = document.getElementById('skills-list-container');
-          skillsContainer.innerHTML = data.profile.skills.map(s => 
-            `<span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('${s}')">${s}</span>`
-          ).join('');
-
+          syncCandidateUI(data.profile, data.ats_score);
           logEvent('RESUME_UPLOADED', `Resume parsed. ID: ${data.resume_id}. Baseline ATS: ${data.ats_score}%.`);
 
           if (showNotification) {
-            showToast(`Profile loaded for Utkarsh Shah (94% ATS Score)`);
+            showToast(`Profile loaded for ${data.profile.name} (${Math.round(data.ats_score)}% ATS Score)`);
             switchTab('resumes');
           }
         }
@@ -1259,10 +1393,37 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
       }
     }
 
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dz = document.getElementById('resume-dropzone');
+      if (dz) dz.classList.add('border-emerald', 'bg-char/40');
+    }
+
+    function handleDragLeave(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dz = document.getElementById('resume-dropzone');
+      if (dz) dz.classList.remove('border-emerald', 'bg-char/40');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dz = document.getElementById('resume-dropzone');
+      if (dz) dz.classList.remove('border-emerald', 'bg-char/40');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) processResumeFile(file);
+    }
+
     async function handleFileUpload(event) {
       const file = event.target.files[0];
+      event.target.value = '';
       if (!file) return;
+      await processResumeFile(file);
+    }
 
+    async function processResumeFile(file) {
       showToast(`Uploading ${file.name}...`);
       const formData = new FormData();
       formData.append('file', file);
@@ -1273,19 +1434,19 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
           method: 'POST',
           body: formData
         });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `HTTP ${res.status}`);
+        }
         const data = await res.json();
         if (data.status === 'success') {
           currentResumeId = data.resume_id;
-          document.getElementById('profile-name').innerText = data.profile.name;
-          document.getElementById('profile-email').innerText = data.profile.email || 'Email extracted';
-          document.getElementById('profile-phone').innerText = data.profile.phone || 'Phone extracted';
-          document.getElementById('resume-ats-score').innerText = Math.round(data.ats_score) + '%';
-          document.getElementById('skills-count-badge').innerText = data.profile.skills_count + ' Skills';
-
-          const skillsContainer = document.getElementById('skills-list-container');
-          skillsContainer.innerHTML = data.profile.skills.map(s => 
-            `<span class="px-3 py-1 rounded-full text-xs font-body border border-char text-bone hover:border-bone cursor-pointer" onclick="filterBySkill('${s}')">${s}</span>`
-          ).join('');
+          syncCandidateUI({
+            name: data.profile.name,
+            email: data.profile.email || 'Email extracted',
+            phone: data.profile.phone || 'Phone extracted',
+            skills: data.profile.skills || []
+          }, data.ats_score);
 
           logEvent('RESUME_UPLOADED', `Uploaded '${file.name}'. Generated candidate profile.`);
           showToast(`Resume uploaded! ${data.profile.skills_count} skills extracted.`);
@@ -1310,7 +1471,19 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
       appendChatBubble('user', msg);
       input.value = '';
 
-      const loadingId = appendChatBubble('assistant', '<div class="typing-dots"><span></span><span></span><span></span></div> Clyde is orchestrating workflow...', 'Orchestrator Agent');
+      const loadingId = appendChatBubble(
+        'assistant',
+        '<div class="typing-dots"><span></span><span></span><span></span></div> Clyde is orchestrating workflow...',
+        'Orchestrator Agent',
+        'Router',
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true
+      );
 
       try {
         const res = await fetch('/api/agent/chat', {
@@ -1322,29 +1495,46 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
           })
         });
 
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `HTTP ${res.status}`);
+        }
+
         const data = await res.json();
         const loadingEl = document.getElementById(loadingId);
         if (loadingEl) loadingEl.remove();
 
         if (data.tailored_data) {
-          currentTailoredBullets = data.tailored_data.drafted_bullets || [];
           if (data.tailored_data.resume_id) {
             currentResumeId = data.tailored_data.resume_id;
           }
-          const docBullet = document.getElementById('doc-bullet-1');
-          if (docBullet && currentTailoredBullets.length > 0) {
-            docBullet.innerText = currentTailoredBullets[0];
-          }
-          const score = document.getElementById('resume-ats-score');
-          if (score) score.innerText = '99%';
+          syncTailoredBulletsUI(data.tailored_data.drafted_bullets || [], 99);
           showToast("Resume tailored & active version updated to 99% ATS!");
         }
 
-        appendChatBubble('assistant', data.reply, data.agent_name, data.provider_used, data.latency_ms, data.tailored_data);
+        appendChatBubble(
+          'assistant',
+          data.reply,
+          data.agent_name,
+          data.provider_used,
+          data.latency_ms,
+          data.tailored_data,
+          data.jobs_data,
+          data.candidate_skills,
+          data.target_location,
+          data.form_fill_data
+        );
         logEvent('AGENT_DISPATCH', `${data.agent_name} replied via ${data.provider_used} in ${data.latency_ms}ms.`);
-      } catch (e) {
+      } catch (err) {
         const loadingEl = document.getElementById(loadingId);
-        if (loadingEl) loadingEl.innerHTML = "Agent offline mode: Task queued on Event Bus.";
+        if (loadingEl) loadingEl.remove();
+        appendChatBubble(
+          'assistant',
+          `Connection error (${err.message}). Please ensure the FastAPI backend is running on port 8000.`,
+          'System Gateway',
+          'Offline',
+          0
+        );
       }
     }
 
@@ -1353,36 +1543,82 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
       handleChatSubmit(new Event('submit'));
     }
 
-    function appendChatBubble(role, content, agent = 'Orchestrator Agent', provider = 'GLM', latency = 120, tailoredData = null) {
+    function formatMarkdown(text) {
+      if (!text) return '';
+      const escaped = escapeHtml(text);
+      return escaped
+        .replace(/^####\s+(.*)$/gm, '<div class="text-xs font-bold uppercase tracking-wider text-amber mt-3 mb-1">$1</div>')
+        .replace(/^###\s+(.*)$/gm, '<div class="text-sm font-bold text-bone mt-3 mb-1">$1</div>')
+        .replace(/^##\s+(.*)$/gm, '<div class="text-base font-heading font-bold text-bone mt-3 mb-1">$1</div>')
+        .replace(/^&gt;\s*\[!IMPORTANT\]\s*$/gm, '<div class="text-[10px] font-mono uppercase tracking-wider text-amber font-bold mt-2">Important Notice</div>')
+        .replace(/^&gt;\s?(.*)$/gm, '<div class="border-l-2 border-amber/70 pl-3 py-0.5 text-xs text-slate">$1</div>')
+        .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-char text-amber font-mono text-xs">$1</code>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, url) => `<a href="${safeUrl(url)}" target="_blank" rel="noopener noreferrer" class="text-[#ff8400] underline hover:text-bone font-medium">${label}</a>`);
+    }
+
+    function triggerTailorForJobByIndex(idx) {
+      if (window.currentDiscoveredJobs && window.currentDiscoveredJobs[idx]) {
+        const job = window.currentDiscoveredJobs[idx];
+        sendQuickPrompt(`Tailor my resume for ${job.title} at ${job.company}`);
+      }
+    }
+
+    function appendChatBubble(
+      role,
+      content,
+      agent = 'Orchestrator Agent',
+      provider = 'GLM',
+      latency = 120,
+      tailoredData = null,
+      jobsData = null,
+      candidateSkills = null,
+      targetLoc = 'Bangalore',
+      formData = null,
+      isRawHtml = false
+    ) {
       const container = document.getElementById('messages-container');
       const bubble = document.createElement('div');
-      const bubbleId = 'bubble-' + Date.now();
+      const bubbleId = `bubble-${Date.now()}-${++bubbleSeq}`;
       bubble.id = bubbleId;
+      chatMessageStore.set(bubbleId, content || '');
+
+      if (jobsData && jobsData.length > 0) {
+        window.currentDiscoveredJobs = jobsData;
+      }
 
       if (role === 'user') {
         bubble.className = "flex justify-end";
         bubble.innerHTML = `
-          <div class="max-w-xl bg-char text-bone px-5 py-3 rounded-2xl rounded-tr-none text-sm font-body border border-char">
-            ${content}
-          </div>
+          <div class="max-w-xl bg-char text-bone px-5 py-3 rounded-2xl rounded-tr-none text-sm font-body border border-char whitespace-pre-wrap">${escapeHtml(content)}</div>
         `;
       } else {
+        const isWide = (jobsData && jobsData.length > 0) || tailoredData || formData;
+        const safeAgent = escapeHtml(agent || 'Orchestrator Agent');
+        const safeProvider = escapeHtml(provider || 'GLM');
+        const safeLatency = Number.isFinite(Number(latency)) ? Number(latency) : 0;
+        const renderedBody = isRawHtml ? content : formatMarkdown(content);
+
         bubble.className = "flex justify-start";
         bubble.innerHTML = `
-          <div class="max-w-2xl bg-surface-dim text-bone p-6 rounded-2xl rounded-tl-none border border-char space-y-3">
+          <div class="${isWide ? 'max-w-3xl w-full' : 'max-w-2xl'} bg-surface-dim text-bone p-6 rounded-2xl rounded-tl-none border border-char space-y-4 shadow-xl">
             <div class="flex items-center justify-between text-xs text-slate border-b border-char pb-2 font-mono">
-              <span class="text-[#ff8400] font-bold">${agent}</span>
-              <span>${provider} • ${latency}ms</span>
+              <span class="text-[#ff8400] font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">${safeAgent.includes('Job') ? 'travel_explore' : 'smart_toy'}</span>
+                <span>${safeAgent}</span>
+              </span>
+              <span>${safeProvider} • ${safeLatency}ms</span>
             </div>
-            <div class="text-sm font-body leading-relaxed whitespace-pre-line">${content}</div>
+            <div class="text-sm font-body leading-relaxed whitespace-pre-line">${renderedBody}</div>
             ${tailoredData ? `
-            <div class="mt-4 pt-3 border-t border-char/80 bg-obsidian/60 -mx-6 -mb-6 p-4 rounded-b-2xl space-y-3">
+            <div class="mt-4 pt-3 border-t border-char/80 bg-obsidian/60 -mx-6 ${formData || (jobsData && jobsData.length > 0) ? 'mb-0 border-b border-char/60' : '-mb-6 rounded-b-2xl'} p-4 space-y-3">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1.5 text-xs text-emerald font-bold">
                   <span class="material-symbols-outlined text-sm">verified</span>
-                  <span>${tailoredData.provenance_score}% Factual Provenance • ATS 99%</span>
+                  <span>${escapeHtml(tailoredData.provenance_score)}% Factual Provenance • ATS ${escapeHtml(tailoredData.ats_score || 99)}%</span>
                 </div>
-                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald/10 text-emerald">Active Resume Updated</span>
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald/10 text-emerald">Active Resume Tailored</span>
               </div>
               <div class="flex flex-wrap gap-2 pt-1">
                 <button onclick="openResumePreview()" class="px-3.5 py-1.5 rounded-full bg-bone text-obsidian text-xs font-bold hover:bg-slate transition-colors flex items-center gap-1.5 shadow-sm">
@@ -1396,29 +1632,124 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
                 </button>
               </div>
             </div>
-            ` : `
+            ` : ''}
+            ${jobsData && jobsData.length > 0 ? `
+            <div class="${tailoredData ? 'mt-0 border-t-0' : 'mt-4 border-t'} pt-3 border-char/80 bg-obsidian/80 -mx-6 ${formData ? 'mb-0 border-b border-char/60' : '-mb-6 rounded-b-2xl'} p-5 space-y-3.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 text-xs text-emerald font-bold">
+                  <span class="material-symbols-outlined text-sm">travel_explore</span>
+                  <span>Live Scraped &amp; Matched Openings (${jobsData.length} in ${escapeHtml(targetLoc || 'Target Location')})</span>
+                </div>
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald/10 text-emerald border border-emerald/20">PostingGuard Verified</span>
+              </div>
+              ${candidateSkills && candidateSkills.length > 0 ? `
+              <div class="text-[11px] text-slate font-mono bg-char/50 px-3 py-1.5 rounded-lg border border-char">
+                <span class="text-bone font-medium">Skills Extracted from Active Resume:</span> ${candidateSkills.slice(0, 9).map(escapeHtml).join(', ')}...
+              </div>
+              ` : ''}
+              <div class="grid grid-cols-1 gap-3 pt-1">
+                ${jobsData.map((job, idx) => `
+                  <div class="p-4 rounded-xl bg-surface-container border border-char hover:border-emerald/50 transition-all duration-200 shadow-sm">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <div class="text-xs font-mono text-slate flex items-center gap-2">
+                          <span class="text-bone font-bold text-sm">${escapeHtml(job.company)}</span>
+                          <span>•</span>
+                          <span class="text-amber-400 font-medium">${escapeHtml(job.source || 'Verified ATS')}</span>
+                        </div>
+                        <div class="text-base font-bold text-bone mt-1">${escapeHtml(job.title)}</div>
+                        <div class="text-xs text-slate mt-1 flex items-center gap-1.5">
+                          <span class="material-symbols-outlined text-xs text-rose-400">location_on</span>
+                          <span>${escapeHtml(job.location)}</span>
+                        </div>
+                      </div>
+                      <div class="text-right shrink-0">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald/15 text-emerald border border-emerald/40 shadow-sm inline-flex items-center gap-1">
+                          <span class="material-symbols-outlined text-[13px]">verified</span>
+                          <span>${escapeHtml(job.match_score)}% Match</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    ${job.description ? `
+                    <div class="text-xs text-slate/90 line-clamp-2 mt-2 leading-relaxed">
+                      ${escapeHtml(job.description)}
+                    </div>
+                    ` : ''}
+
+                    <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                      <span class="text-[10px] font-mono text-slate mr-1">Skills:</span>
+                      ${(job.matching_skills || []).map(s => `
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-char text-emerald border border-emerald/30">${escapeHtml(s)}</span>
+                      `).join('')}
+                      ${(job.missing_skills || []).slice(0, 2).map(s => `
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-char text-slate border border-char line-through opacity-70">${escapeHtml(s)}</span>
+                      `).join('')}
+                    </div>
+
+                    <div class="mt-3.5 pt-2.5 border-t border-char/60 flex items-center justify-between gap-2">
+                      <a href="${safeUrl(job.job_url)}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-full bg-bone text-obsidian text-xs font-bold hover:bg-slate transition-colors flex items-center gap-1.5 shadow-sm">
+                        <span>Apply Official</span>
+                        <span class="material-symbols-outlined text-xs">open_in_new</span>
+                      </a>
+                      <button onclick="triggerTailorForJobByIndex(${idx})" class="px-3.5 py-1.5 rounded-full border border-emerald/80 text-emerald hover:bg-emerald hover:text-obsidian text-xs font-semibold transition-colors flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-xs">auto_awesome</span>
+                        <span>Tailor Resume</span>
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+            ${formData ? `
+            <div class="${tailoredData || (jobsData && jobsData.length > 0) ? 'mt-0 border-t-0' : 'mt-4 border-t'} border-char/80 bg-obsidian/80 -mx-6 -mb-6 p-5 rounded-b-2xl space-y-3.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 text-xs text-sky-400 font-bold">
+                  <span class="material-symbols-outlined text-sm">extension</span>
+                  <span>Application Agent • Browser Automation</span>
+                </div>
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">WebSocket Event Streamed</span>
+              </div>
+              <div class="text-[12px] text-bone bg-char/40 p-3.5 rounded-xl border border-char flex items-center justify-between gap-3">
+                <div class="truncate">
+                  <div class="font-medium text-bone truncate max-w-md">${formData.job_title ? `${escapeHtml(formData.job_title)} • <span class="text-amber-400 font-bold">${escapeHtml(formData.company_name)}</span>` : escapeHtml(formData.target_url)}</div>
+                  <div class="text-[11px] text-slate font-mono mt-0.5">${escapeHtml(formData.target_url)} • Candidate: ${escapeHtml(formData.candidate_name)}</div>
+                </div>
+                <a href="${safeUrl(formData.target_url)}" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-full bg-sky-400 text-obsidian text-xs font-bold hover:bg-sky-300 transition-colors flex items-center gap-1 shadow-sm shrink-0">
+                  <span>Open Form</span>
+                  <span class="material-symbols-outlined text-xs">open_in_new</span>
+                </a>
+              </div>
+            </div>
+            ` : ''}
+            ${!isRawHtml && !tailoredData && (!jobsData || jobsData.length === 0) && !formData ? `
             <div class="flex items-center gap-3 pt-2 text-xs text-slate">
-              <button onclick="copyToClipboard('${content.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')" class="hover:text-bone flex items-center gap-1">
+              <button onclick="copyBubbleMessage('${bubbleId}')" class="hover:text-bone flex items-center gap-1">
                 <span class="material-symbols-outlined text-xs">content_copy</span> Copy
               </button>
               <button onclick="showToast('Feedback recorded!')" class="hover:text-bone flex items-center gap-1">
                 <span class="material-symbols-outlined text-xs">thumb_up</span> Helpful
               </button>
             </div>
-            `}
+            ` : ''}
           </div>
         `;
       }
 
       container.appendChild(bubble);
       const streamBox = document.getElementById('chat-stream-box');
-      streamBox.scrollTop = streamBox.scrollHeight;
+      if (streamBox) streamBox.scrollTop = streamBox.scrollHeight;
       return bubbleId;
     }
 
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text);
-      showToast("Copied to clipboard!");
+    function copyBubbleMessage(bubbleId) {
+      const text = chatMessageStore.get(bubbleId) || '';
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!"));
+      } else {
+        showToast("Clipboard unavailable", true);
+      }
     }
 
     function showToast(msg, isError = false) {
@@ -1430,7 +1761,7 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
         <span class="material-symbols-outlined text-sm ${isError ? 'text-rose' : 'text-emerald'}">
           ${isError ? 'error' : 'check_circle'}
         </span>
-        <span>${msg}</span>
+        <span>${escapeHtml(msg)}</span>
       `;
       container.appendChild(toast);
       setTimeout(() => {
@@ -1444,12 +1775,14 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
     async function refreshTelemetry() {
       try {
         const res = await fetch('/api/telemetry/health');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
-        document.getElementById('stat-vector-dim').innerText = data.vector_store.dimension + '-D';
-        document.getElementById('stat-jobs-count').innerText = data.vector_store.jobs_indexed + ' Roles';
-        document.getElementById('stat-bus-mode').innerText = data.event_bus.mode.includes('Redis') ? 'Redis Pub/Sub' : 'Decoupled Queue';
-        document.getElementById('stat-db-counts').innerText = data.database_metrics.jobs + ' Jobs, ' + data.database_metrics.resumes + ' Resumes';
+        document.getElementById('stat-vector-dim').innerText = (data.vector_store?.dimension || 128) + '-D';
+        document.getElementById('stat-jobs-count').innerText = (data.vector_store?.jobs_indexed ?? 0) + ' Roles';
+        const busMode = data.event_bus?.mode || '';
+        document.getElementById('stat-bus-mode').innerText = busMode.includes('Redis') ? 'Redis Pub/Sub' : 'Decoupled Queue';
+        document.getElementById('stat-db-counts').innerText = `${data.database_metrics?.jobs ?? 0} Jobs, ${data.database_metrics?.resumes ?? 0} Resumes`;
       } catch (e) {
         console.error("Telemetry error:", e);
       }
@@ -1459,11 +1792,9 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
       const box = document.getElementById('event-feed-box');
       if (!box) return;
       const item = document.createElement('div');
-      item.innerHTML = `<span class="text-[#ff8400]">[${type}]</span> ${text}`;
+      item.innerHTML = `<span class="text-[#ff8400]">[${escapeHtml(type)}]</span> ${escapeHtml(text)}`;
       box.prepend(item);
     }
-
-    let currentTailoredBullets = [];
 
     async function verifyLiveJobUrl() {
       const url = document.getElementById('live-job-url-input').value.trim();
@@ -1477,25 +1808,26 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
 
       try {
         const res = await fetch(`/api/jobs/verify-url?url=${encodeURIComponent(url)}`, { method: 'POST' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         let badge = '';
         if (data.is_official_ats) {
-          badge = `<span class="text-emerald font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">verified</span> OFFICIAL ATS APEX (${data.apex})</span>`;
+          badge = `<span class="text-emerald font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">verified</span> OFFICIAL ATS APEX (${escapeHtml(data.apex)})</span>`;
         } else if (data.category === 'PORTAL_AGGREGATOR') {
-          badge = `<span class="text-amber font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">info</span> KNOWN PORTAL AGGREGATOR (${data.portal})</span>`;
+          badge = `<span class="text-amber font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">info</span> KNOWN PORTAL AGGREGATOR (${escapeHtml(data.portal)})</span>`;
         } else {
           badge = `<span class="text-rose font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">warning</span> UNVERIFIED THIRD-PARTY HOST</span>`;
         }
 
         resBox.innerHTML = `
           <div class="flex items-center justify-between">
-            <span>Host: <strong class="text-bone">${data.host || 'Unknown'}</strong></span>
+            <span>Host: <strong class="text-bone">${escapeHtml(data.host || 'Unknown')}</strong></span>
             ${badge}
           </div>
           <p class="text-slate text-[11px]">Source host verification protects students against deceptive aggregator links.</p>
         `;
       } catch (e) {
-        resBox.innerHTML = `<span class="text-rose">Verification error: ${e.message}</span>`;
+        resBox.innerHTML = `<span class="text-rose">Verification error: ${escapeHtml(e.message)}</span>`;
       }
     }
 
@@ -1511,24 +1843,24 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
 
       try {
         const res = await fetch(`/api/jobs/scrape?url=${encodeURIComponent(url)}`, { method: 'POST' });
-        const data = await res.json();
-        if (data.status === 'success') {
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.status === 'success') {
           resBox.innerHTML = `
             <div class="flex items-center justify-between text-emerald font-bold">
-              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> Ingested: ${data.title} at ${data.company}</span>
-              <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald/20">Security: ${data.security_verdict}</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> Ingested: ${escapeHtml(data.title)} at ${escapeHtml(data.company)}</span>
+              <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald/20">Security: ${escapeHtml(data.security_verdict)}</span>
             </div>
-            <div class="text-[11px] text-slate">Indexed into 128-D FAISS. Required skills extracted: ${(data.required_skills||[]).join(', ')}</div>
+            <div class="text-[11px] text-slate">Indexed into 128-D FAISS. Required skills extracted: ${(data.required_skills||[]).map(escapeHtml).join(', ')}</div>
           `;
           showToast(`Ingested ${data.title}! Triggering FAISS match.`);
           logEvent('JOB_SCRAPED', `Scraped and indexed live job '${data.title}' at '${data.company}'. Security: ${data.security_verdict}`);
           await fetchJobs();
           triggerJobMatch();
         } else {
-          resBox.innerHTML = `<span class="text-rose">Scraping failed: ${data.detail || 'Error'}</span>`;
+          resBox.innerHTML = `<span class="text-rose">Scraping failed: ${escapeHtml(data.detail || `HTTP ${res.status}`)}</span>`;
         }
       } catch (e) {
-        resBox.innerHTML = `<span class="text-rose">Scraping failed: ${e.message}</span>`;
+        resBox.innerHTML = `<span class="text-rose">Scraping failed: ${escapeHtml(e.message)}</span>`;
       }
     }
 
@@ -1557,12 +1889,16 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
           method: 'POST',
           body: formData
         });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `HTTP ${res.status}`);
+        }
         const data = await res.json();
 
         if (data.status === 'success') {
           currentTailoredBullets = data.drafter.drafted_bullets || [];
           const bulletsList = document.getElementById('dr-drafter-bullets');
-          bulletsList.innerHTML = currentTailoredBullets.map(b => `<li class="leading-relaxed">${b}</li>`).join('');
+          bulletsList.innerHTML = currentTailoredBullets.map(b => `<li class="leading-relaxed">${escapeHtml(b)}</li>`).join('');
 
           document.getElementById('dr-reviewer-critique').innerText = data.reviewer.critique;
           document.getElementById('dr-provenance-score').innerText = `${data.factual_grounding.provenance_score}% Provenance`;
@@ -1570,9 +1906,11 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
           document.getElementById('dr-modal-loading').classList.add('hidden');
           document.getElementById('dr-modal-content').classList.remove('hidden');
           logEvent('DRAFTER_REVIEWER_AUDIT', `Tailored for ${title} at ${company} via ${data.drafter.provider}. 100% Provenance.`);
+        } else {
+          throw new Error(data.detail || 'Audit failed');
         }
       } catch (e) {
-        showToast("Drafter-Reviewer audit error", true);
+        showToast("Drafter-Reviewer audit error: " + e.message, true);
         closeDrafterReviewerModal();
       }
     }
@@ -1585,13 +1923,7 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
     }
 
     function applyTailoredBulletsToActiveResume() {
-      if (currentTailoredBullets.length > 0) {
-        const docBullet = document.getElementById('doc-bullet-1');
-        if (docBullet) docBullet.innerText = currentTailoredBullets[0];
-      }
-      const score = document.getElementById('resume-ats-score');
-      if (score) score.innerText = '99%';
-
+      syncTailoredBulletsUI(currentTailoredBullets, 99);
       closeDrafterReviewerModal();
       showToast("Tailored bullets applied to active resume! ATS elevated to 99%.");
       openResumePreview();
@@ -1606,6 +1938,7 @@ Projects: AI-Powered Resume Automation Platform. Engineered an event-driven mult
     });
 
     window.addEventListener('DOMContentLoaded', () => {
+      loadDemoResume(false);
       fetchJobs();
       refreshTelemetry();
     });
